@@ -1,0 +1,13 @@
+C++ 的 traits 技术，是一种约定俗称的技术方案. 
+traits 技术的关键在于，使用另外的模板类 type_traits 来保存不同数据类型的 type，这样就可以兼容自定义数据类型和内置数据类型
+
+1. integral_constant 
+这个类是所有traits类的基类，分别提供了以下功能：
+value_type 表示值的类型;
+value表示值;
+type 表示自己, 因此可以用::type::value来获取值;
+true_type和false_type两个特化类用来表示bool值类型的traits，很多traits类都需要继承它们.
+
+2. https://blog.csdn.net/weixin_46412362/article/details/117755100 iterator_traits
+
+
