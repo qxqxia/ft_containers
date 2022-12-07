@@ -10,4 +10,14 @@ true_type和false_type两个特化类用来表示bool值类型的traits，很多
 
 2. https://blog.csdn.net/weixin_46412362/article/details/117755100 iterator_traits
 
+3. https://en.cppreference.com/w/cpp/types/enable_if
+enable_if的出现使得SFINAE使用上更加方便，进一步扩展了上面has_xxx is_xxx的作用。
+
+而enable_if实现上也是使用了SFINAE。
+4. https://en.cppreference.com/w/cpp/language/sfinae
+
+SFINAE是C++模板编译的一个原则，全名叫做Substitution Failure Is Not An Error
+
+C++编译过程中，如果模板实例化后的某个模板函数（模板类）对该调用无效，那么将继续寻找其他重载决议，而不是引发一个编译错误。
+
 
