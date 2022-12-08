@@ -5,7 +5,7 @@
 #include <cstddef>
 
 namespace ft{
-//std::integral_constant
+//std::integral_constant 是所有traits类的基类
 template<class T, T Var> //T: value_type
 struct integral_constant{
     typedef T                           value_type;
@@ -71,24 +71,32 @@ bool lexicographical_compare( InputIt1 first1, InputIt1 last1, InputIt2 first2, 
 //std::pair
 template<class T1, class T2> 
 struct pair{
+    //Member types
     typedef T1 first_type;
     typedef T2 second_type;
-
+    //Member variables
     T1 first;
     T2 second;
-
     public:
-    pair():first(T1()), second(T2()){}
+    //default constructor
+    pair(void):first(T1()), second(T2()){}
     pair(const T1& a, const T2& b) : first(a), second(b){} 
     //copy constructor
     template<class U, class V> 
     pair (const pair<U,V>& pr) : first(pr,first), second(pr.second){}
+    //Member functions
     //copy assignment operator
     pair& operator=(pair const &rhs){
         this->first = rhs.first;
         this->second = rhs.second;
         return (*this);
     }
+    swap??
+    //Non-member function overloads
+    relational operators (pair)	??
+    swap (pair)	??
+    get (pair) ??
+
 }
 
 //std::make_pair
