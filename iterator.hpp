@@ -16,6 +16,21 @@ namespace ft{
     struct forward_iterator_tag : public input_iterator_tag {};
     struct bidirectional_iterator_tag : public forward_iterator_tag {};
     struct random_access_iterator_tag : public bidirectional_iterator_tag {};
+    
+    //std::iterator
+    //std::iterator is the base class provided to simplify definitions of the required types for iterators.
+    template<class Category,
+                class T,
+                class Distance = std::ptrdiff_t,
+                class Pointer = T*,
+                class Reference = T&> 
+    struct iterator{
+        typedef typename Category   iterator_category;
+        typedef typename T          value_type;
+        typedef typename Distance   difference_type;
+        typedef typename Pointer    pointer;
+        typedef typename Reference  reference;
+    }
 
     //std::iterator_traits
     //迭代器类型萃取可以提取迭代器的各个类型
@@ -53,20 +68,8 @@ namespace ft{
             typedef T*                                  pointer;
             typedef T&                                  reference;
     };
-    //std::iterator
-    //std::iterator is the base class provided to simplify definitions of the required types for iterators.
-    template<class Category,
-                class T,
-                class Distance = std::ptrdiff_t,
-                class Pointer = T*,
-                class Reference = T&> 
-    struct iterator{
-        typedef typename Category   iterator_category;
-        typedef typename T          value_type;
-        typedef typename Distance   difference_type;
-        typedef typename Pointer    pointer;
-        typedef typename Reference  reference;
-    }
+    
+
     //std::reverse_iterator
     template<class Iter>
     class reverse_iterator{
