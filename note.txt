@@ -20,4 +20,8 @@ SFINAE是C++模板编译的一个原则，全名叫做Substitution Failure Is No
 
 C++编译过程中，如果模板实例化后的某个模板函数（模板类）对该调用无效，那么将继续寻找其他重载决议，而不是引发一个编译错误。
 
+5. https://leezw.net/assets/pdf/STL%E6%BA%90%E7%A0%81%E5%89%96%E6%9E%90.pdf
+
+6. rb-tree is a container but is private
+
 
