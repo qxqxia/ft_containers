@@ -1,6 +1,13 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
+#include <iostream>
+#include <algorithm>
+#include <limits>
+#include "vecIterator.hpp"
+#include "templates.hpp"
+
+
 template<class T, class Allocator = std::allocator<T>> 
 class vector{
     public:
@@ -11,6 +18,8 @@ class vector{
         vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){}
             
         vector (const vector& x){}
+
+        
 
     
 };
