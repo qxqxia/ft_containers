@@ -136,7 +136,8 @@ class vector{
         }
 
         void pop_back(){
-
+            _allocator.destroy(this->_end - 1);
+            return (this->_end);
         }
         //insert- single element
         iterator insert(iterator position, const value_type& val){
@@ -153,19 +154,25 @@ class vector{
         }
         
         iterator erase(iterator position){
-
-        }
-
-        iterator erase(iterator first, iterator last){
-
-        }
-
-        void swap(vector& x){
             
         }
 
-        void clear(){
+        iterator erase(iterator first, iterator last){
+            for(; first != last; --last){
+                erase(first);
+            }
+            return (iterator(first));
+        }
 
+        void swap(vector& x){
+
+        }
+
+        void clear(){
+            size_type n = size();
+            while(--n > 0){
+                this->_allocator.destroy(--this->_end);
+            }
         }
 
         template <class... Args>
@@ -180,7 +187,7 @@ class vector{
 
         //allocator
         allocator_type get_allocator() const{
-
+            return (this->_allocator);
         }
     private:
         allocator_type  _allocator;
@@ -208,12 +215,12 @@ class vector{
 
         template <class T, class Alloc>  
         bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-
+            return 
         }
 
         template <class T, class Alloc>  
         bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-
+            return 
         }
 
         template <class T, class Alloc>  
