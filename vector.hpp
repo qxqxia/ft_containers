@@ -7,231 +7,235 @@
 #include "vecIterator.hpp"
 #include "templates.hpp"
 
+namespace ft
+{
+    template<class T, class Allocator = std::allocator<T>> 
+        class vector{
+            public:
+                typedef T           value_type;
+                typedef Allocator   allocator_type;
+            public:
+                explicit vector(const allocator_type& alloc = allocator_type()) :
+                        _allocator(alloc),_end_of_storage(0),_begin(0),_end(0){}
+                ??explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
+                        _allocator(alloc),_end_of_storage(0),_begin(0),_end(0){
+                            .......
 
-template<class T, class Allocator = std::allocator<T>> 
-class vector{
-    public:
-        typedef T           value_type;
-        typedef Allocator   allocator_type;
-    public:
-        vector(void){}
-        explicit vector(const allocator_type& alloc = allocator_type()){
+                }
+                    
+                ??template <class InputIterator>         
+                vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
 
-        }
-        explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()){
+                }
+                    
+                ??vector (const vector& x){
 
-        }
-            
-        template <class InputIterator>         
-        vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
+                }
 
-        }
-            
-        vector (const vector& x){
+                ~vector(void){
+                    clear();
+                    _allocator.deallocate(this->_begin, capacity());
+                }
 
-        }
+                ??vector& operator=(vector const &x){
 
-        ~vector(void){}
+                }
 
-        vector& operator=(vector const &x){
+                //iterator
+                iterator begin(){
+                    return (iterator(this->_begin));
+                }
 
-        }
+                const_iterator begin()const{
+                    return (const_iterator(this->_begin));
+                }
 
-        //iterator
-        iterator begin(){
-            return (iterator(this->begin));
-        }
+                iterator end(){
+                    return (iterator(this->_end));
+                }
 
-        const_iterator begin()const{
-            return (const_iterator(this->begin));
-        }
+                const_iterator end()const{
+                    return (const_iterator(this->_end));
+                }
 
-        iterator end(){
-            return (iterator(this->end));
-        }
+                reverse_iterator rbegin(){
+                    return (reverse_iterator(end()));
+                }
 
-        const_iterator end()const{
-            return (const_iterator(this->end));
-        }
+                const_reverse_iterator rbegin()const{
+                    return (const_reverse_iterator(end()));
+                }
 
-        reverse_iterator rbegin(){
-            return (reverse_iterator(end()));
-        }
+                reverse_iterator rend(){
+                    return (reverse_iterator(begin()));
+                }
 
-        const_reverse_iterator rbegin()const{
-            return (const_reverse_iterator(end()));
-        }
+                const_reverse_iterator rend()const{
+                    return (const_reverse_iterator(begin()));
+                }
 
-        reverse_iterator rend(){
-            return (reverse_iterator(begin()));
-        }
+                //capacity
+                size_type size()const{
+                    return (size_type(end() - begin()));
+                }
 
-        const_reverse_iterator rend()const{
-            return (const_reverse_iterator(begin()));
-        }
+                ??size_type max_size()const{
 
-        //capacity
-        size_type size()const{
-            return (this->_end - this->_begin);
-        }
+                }
 
-        size_type max_size()const{
+                void resize(size_type n, value_type val = value_type()){
+                    if (n < size())
+                        erase(begin() + n, end());
+                    else    
+                        insert(end(), n - size(), val);
+                }
 
-        }
+                size_type capacity()const{
+                    return (size_type(this->_end_of_storage - begin()));
+                }
 
-        void resize(size_type n, value_type val = value_type()){
+                bool empty()const{
+                    return (begin() == end());
+                }
 
-        }
+                ??void reserve(size_type n){
 
-        size_type capacity()const{
-            return (this->_capacity - this->_begin);
-        }
+                }
 
-        bool empty()const{
-            return (size() == 0);
-        }
+                //element access
+                reference operator[](size_type n){
+                    return (*(begin() + n));
+                }
+                
+                const_reference operator[](size_type n) const{
+                    return (*(begin() + n));
+                }
 
-        void reserve(size_type n){
+                reference at(size_type n);const_reference at (size_type n) const{
+                    return ((*this)[n]);
+                }
 
-        }
+                reference front(){return (*begin());}
+                
+                const_reference front()const{return (*begin());}
 
-        void shrink_to_fit(){
+                reference back(){return (*end() - 1);}
+                
+                const_reference back()const{return (*end() - 1);}
 
-        }
+                //modifiers
+                //assign in the range version
+                ??template <class InputIterator>  
+                void assign(InputIterator first, InputIterator last){
 
-        //element access
-        reference operator[](size_type n){
-            return (*(begin() + n));
-        }
-        
-        const_reference operator[](size_type n) const{
-            return (*(begin() + n));
-        }
+                }
+                //assign in the file version
+                ??void assign(size_type n, const value_type& val){
 
-        reference at(size_type n);const_reference at (size_type n) const{
-            return ((*this)[n]);
-        }
+                }
 
-        reference front(){return (*begin());}
-        
-        const_reference front()const{return (*begin());}
+                void push_back(const value_type& val){
+                    if (_end != _end_of_storage){
+                        _allocator.construct(_end, val);
+                        ++_end;
+                    }
+                    else
+                        reserve(size() != 0? size() * 2 : 1); //if size = 0, give an element size; if size > 0, give twice of the old size
+                }
 
-        reference back(){return (*end());}
-        
-        const_reference back()const{return (*end());}
+                void pop_back(){
+                    --_end;
+                    destroy(_end);
+                }
+                //insert- single element
+                ??iterator insert(iterator position, const value_type& val){
 
-        //modifiers
-        //assign in the range version
-        template <class InputIterator>  
-        void assign(InputIterator first, InputIterator last){
+                }
+                //insert-fill
+                ??void insert(iterator position, size_type n, const value_type& val){
 
-        }
-        //assign in the file version
-        void assign(size_type n, const value_type& val){
+                }
+                //insert-range
+                ??template <class InputIterator>    
+                void insert(iterator position, InputIterator first, InputIterator last){
 
-        }
+                }
+                
+                iterator erase(iterator position){
+                    if (position + 1 != end()){
+                        std::copy(position + 1, _end, position);
+                    }
+                    --_end;
+                    destroy(_end);
+                    return (position);
+                }
 
-        void push_back(const value_type& val){
+                iterator erase(iterator first, iterator last){
+                    for(; first != last; --last){
+                        erase(first);
+                    }
+                    return (iterator(first));
+                }
 
-        }
+                ??void swap(vector& x){
 
-        void pop_back(){
-            _allocator.destroy(this->_end - 1);
-            return (this->_end);
-        }
-        //insert- single element
-        iterator insert(iterator position, const value_type& val){
+                }
 
-        }
-        //insert-fill
-        void insert(iterator position, size_type n, const value_type& val){
+                void clear(){
+                    erase(begin(), end());
+                }
 
-        }
-        //insert-range
-        template <class InputIterator>    
-        void insert(iterator position, InputIterator first, InputIterator last){
+                //allocator
+                allocator_type get_allocator() const{
+                    return (this->_allocator);
+                }
+            protected:
+                allocator_type  _allocator;
+                iterator        _end_of_storage;
+                iterator        _begin;
+                iterator        _end;
+        };
+                
+//Non-member function overloads
+//relational operators
+template <class T, class Alloc>  
+bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+    if (lhs.size() != rhs.size())
+        return (false);
+    return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+}
 
-        }
-        
-        iterator erase(iterator position){
-            
-        }
+template <class T, class Alloc>  
+bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+    return !(lhs == rhs);
+}
 
-        iterator erase(iterator first, iterator last){
-            for(; first != last; --last){
-                erase(first);
-            }
-            return (iterator(first));
-        }
+template <class T, class Alloc>  
+bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+    return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end())
+}
 
-        void swap(vector& x){
+//use operator<
+template <class T, class Alloc>  
+bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+    return !(rhs < lhs);
+}
 
-        }
+template <class T, class Alloc>  
+bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+    return (rhs < lhs);
+}
 
-        void clear(){
-            size_type n = size();
-            while(--n > 0){
-                this->_allocator.destroy(--this->_end);
-            }
-        }
+template <class T, class Alloc>  
+bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
+    return !(lhs < rhs);
+}
 
-        template <class... Args>
-        iterator emplace(const_iterator position, Args&&... args){
-
-        }
-
-        template <class... Args>  
-        void emplace_back(Args&&... args){
-
-        }
-
-        //allocator
-        allocator_type get_allocator() const{
-            return (this->_allocator);
-        }
-    private:
-        allocator_type  _allocator;
-        pointer         _capacity;
-        pointer         _begin;
-        pointer         _end;
-};
-        
-        //Non-member function overloads
-        //relational operators
-        template <class T, class Alloc>  
-        bool operator==(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-
-        }
-
-        template <class T, class Alloc>  
-        bool operator!=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-            return !(lhs == rhs);
-        }
-
-        template <class T, class Alloc>  
-        bool operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-            return 
-        }
-
-        template <class T, class Alloc>  
-        bool operator<=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-            return 
-        }
-
-        template <class T, class Alloc>  
-        bool operator>(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-            return 
-        }
-
-        template <class T, class Alloc>  
-        bool operator>=(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs){
-
-        }
-
-        template <class T, class Alloc>  
-        void swap(vector<T,Alloc>& x, vector<T,Alloc>& y){
-            
-        }
+template <class T, class Alloc>  
+void swap(vector<T,Alloc>& x, vector<T,Alloc>& y){
+    x.swap(y);
+    }
+}
 
 
 #endif
