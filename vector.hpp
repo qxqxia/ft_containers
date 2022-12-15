@@ -67,7 +67,14 @@ namespace ft
                 ??vector& operator=(vector const &x){
                     if (this == &x)
                         return (*this);
-                    
+                    clear();
+                    size_type n = x.size();
+                   ?? if (n > )
+                    iterator tmp = this->_begin;
+                    for(;n > 0; n--){
+                        _allocator.construct(_end++, *tmp++);
+                    }
+                    return (*this);
                 }
 
                 //iterator
