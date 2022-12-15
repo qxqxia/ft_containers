@@ -25,3 +25,33 @@ C++编译过程中，如果模板实例化后的某个模板函数（模板类�
 6. rb-tree is a container but is private
 
 
+vector:
+    1.begin, 返回数据区左边界的指针
+    2.end, 返回数据区右虚边界指针
+    3.rbegin, 返回数据区右虚边界对应的反向迭代器
+    4.rend, 返回数据区左边界对应的反向迭代器
+    5.size, 返回end()-begin(), 即数据区元素个数
+    6.max_size, 返回size_type类型的最大数, 也就是size_t能够表示的最大值
+    7.capacity, 返回_M_end_of_storage - begin(); 即缓冲区能够容纳的元素个数
+    8.swap, 交换_M_start， _M_finish， _M_end_of_storage这三个指针即可
+    9.insert, 同push_back, 不同点在于insert需要移动插入位置之后的所有元素
+    10.pop_back, 销毁末尾元素
+    11.erase, 销毁指定元素或者区间，然后将被销毁元素之后的所有元素向头部复制
+    12.resize，分两种情况
+        新size比现在大，插入new_size - old_size个0值
+        新size比现在小，对尾部old_size - new_size个元素执行erase，需要注意的是，resize并不会释放缓冲区上可用内存
+
+    13.operator=, 假设将b赋值给a, 分三种情况
+        如果b.size > a.capacity, a先执行_M_allocate_and_copy申请并初始化新缓冲区，再执行_M_deallocate释放旧缓冲区
+        如果a.size > b.size,  直接复制b到a, 并销毁a中多余的对象
+        如果a.size < b.size < a.capacity, 先复制b的前a.size个元素到a, 然后执行uninitialized_copy复制b的后b.size-a.size个元素到a中
+
+    14.reserve,  申请新内存，反向复制所有元素并释放旧内存
+    15.assign(n, val) 实现上也分三种情况
+        n > a.capacity,  构造新vector(假设为tmp), 并执行a.swap(tmp)
+        a.size < n < a.capacity, 同operator=
+        n < a.size, 同operator=
+
+
+
+

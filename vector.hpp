@@ -15,21 +15,48 @@ namespace ft
                 typedef T           value_type;
                 typedef Allocator   allocator_type;
             public:
+                //default
                 explicit vector(const allocator_type& alloc = allocator_type()) :
                         _allocator(alloc),_end_of_storage(0),_begin(0),_end(0){}
-                ??explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
+                //avec size
+                explicit vector(size_type n, const value_type& val = value_type(), const allocator_type& alloc = allocator_type()) :
                         _allocator(alloc),_end_of_storage(0),_begin(0),_end(0){
-                            .......
-
+                            try{
+                                this->_begin = _allocator.allocate(n);
+                            }catch (std::exception &e){
+                                std::cout << e.what();
+                            }
+                            this->_end_of_storage = this->_begin + n;
+                            this->_end = this->_begin;
+                            for (; n > 0; n--){
+                                _allocator.construct(_end++, val);
+                            }
                 }
-                    
-                ??template <class InputIterator>         
-                vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type()){
 
+                // 从迭代器构造vector   
+                // Check whether it's an integral type.  If so, it's not an iterator. SFINAE
+                template <class InputIterator>         
+                vector (InputIterator first, InputIterator last, const allocator_type& alloc = allocator_type(),
+                 typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type* = NULL) :
+                 _allocator(alloc){
+                    size_type n = last - first;
+                    this->_begin = _allocator.allocate(n);
+                    this->_end_of_storage = this->_begin + n;
+                    this->_end = this->_begin;
+                    for(; n > 0; n--){
+                        _allocator.construct(_end++, *first++); //
+                    }
                 }
-                    
-                ??vector (const vector& x){
-
+                
+                //copy constructor
+                vector (const vector& x){
+                    size_type n = x.size();
+                    this->_begin = _allocator.allocate(n);
+                    this->_end_of_storage = this->_begin + n;
+                    iterator tmp = this->_begin; //
+                    for (; n > 0; n--){
+                        _allocator.construct(_end++, *tmp++);//
+                    }
                 }
 
                 ~vector(void){
@@ -38,7 +65,9 @@ namespace ft
                 }
 
                 ??vector& operator=(vector const &x){
-
+                    if (this == &x)
+                        return (*this);
+                    
                 }
 
                 //iterator
@@ -95,7 +124,7 @@ namespace ft
                 }
 
                 bool empty()const{
-                    return (begin() == end());
+                    return (size() == 0);
                 }
 
                 ??void reserve(size_type n){
@@ -139,8 +168,9 @@ namespace ft
                         _allocator.construct(_end, val);
                         ++_end;
                     }
+                    //如果push_back之前capacity为0, 扩展后的capacity为1，否则新capacity是旧capacity的两倍
                     else
-                        reserve(size() != 0? size() * 2 : 1); //if size = 0, give an element size; if size > 0, give twice of the old size
+                        reserve(size() != 0? size() * 2 : 1);
                 }
 
                 void pop_back(){
