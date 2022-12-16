@@ -52,6 +52,9 @@ vector:
         a.size < n < a.capacity, 同operator=
         n < a.size, 同operator=
 
+resize(size_type): 对某个vector容器调用resize方法会在该容器尾部添加或删除一些元素，使容器达到指定的大小。
+
+reserve(size_type): 对某个vector容器调用reserve方法仅仅设置capacity这个值.
 
 
 

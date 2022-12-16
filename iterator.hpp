@@ -24,17 +24,18 @@ namespace ft{
                 class Distance = std::ptrdiff_t,
                 class Pointer = T*,
                 class Reference = T&> 
-    struct iterator{
-        typedef typename Category   iterator_category;
-        typedef typename T          value_type;
-        typedef typename Distance   difference_type;
-        typedef typename Pointer    pointer;
-        typedef typename Reference  reference;
-    }
+    class iterator{
+        public:
+            typedef  Category   iterator_category;
+            typedef  T          value_type;
+            typedef  Distance   difference_type;
+            typedef  Pointer    pointer;
+            typedef  Reference  reference;
+    };
 
     //std::iterator_traits
     //迭代器类型萃取可以提取迭代器的各个类型
-    template< class Iter >
+    template<class Iterator>
     struct iterator_traits{
         /*迭代器要求五个类型定义
         value_type:迭代器所指对象的类型
@@ -42,15 +43,15 @@ namespace ft{
         pointer:迭代器所指对象的原生指针类型
         reference:迭代器所指对象的原生引用类型
         iterator_category:迭代器的类型。*/
-        typedef typename Iter::iterator_category    iterator_category;
-        typedef typename Iter::value_type           value_type;
-        typedef typename Iter::difference_type      difference_type;
-        typedef typename Iter::pointer              pointer;
-        typedef typename Iter::reference            reference;
-    }
+        typedef typename Iterator::iterator_category    iterator_category;
+        typedef typename Iterator::value_type           value_type;
+        typedef typename Iterator::difference_type      difference_type;
+        typedef typename Iterator::pointer              pointer;
+        typedef typename Iterator::reference            reference;
+    };
     //Specializations
     template <class T> 
-    class iterator_traits<T*> {
+    class iterator_traits<T*>{
         public:
             typedef random_access_iterator_tag          iterator_category;
             typedef T                                   value_type;
@@ -60,7 +61,7 @@ namespace ft{
       
     };
     template <class T> 
-    class iterator_traits<const T*> {
+    class iterator_traits<const T*>{
         public:
             typedef random_access_iterator_tag          iterator_category;
             typedef T                                   value_type;
@@ -68,10 +69,9 @@ namespace ft{
             typedef T*                                  pointer;
             typedef T&                                  reference;
     };
-    
 
     //std::reverse_iterator
-    template<class Iter>
+    template<class Iterator>
     class reverse_iterator{
         public:
             //Member types
