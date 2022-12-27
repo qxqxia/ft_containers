@@ -116,8 +116,8 @@ namespace ft
                     return (size_type(end() - begin()));
                 }
 
-                ??size_type max_size()const{
-
+                size_type max_size()const{
+                    return allocator_type().max_size();
                 }
 
                 void resize(size_type n, value_type val = value_type()){
@@ -136,7 +136,12 @@ namespace ft
                 }
 
                 ??void reserve(size_type n){
-
+                    if (n > max_size()){
+                        throw std::length_error("Vector length error");
+                    }
+                    if (n > capacity()){
+                        
+                    }
                 }
 
                 //element access
