@@ -1,20 +1,19 @@
 #include "iostream"
-#include "vector"
+#include "vector.hpp"
 #include "iterator.hpp"
 #include "vecIterator.hpp"
+#include <algorithm>
 
-using	namespace std;
-
-void resize(int, int, vector<int>& );
+void resize(int, int, ft::vector<int>& );
 
 int	main()
 {
-	vector<int>		V(5, 10);
-	ft::vectIterator<vector<int>>	it;
+	ft::vector<int>		V(5, 10);
+	ft::vectIterator<ft::vector<int> >	it;
 	it = V.begin();
 	while (it != V.end())
 	{
-		cout << *it << endl;
+		std::cout << *it << std::endl;
 		it++;
 	}
 	/*
@@ -32,7 +31,7 @@ int	main()
 	*/
 }
 
-void resize(int n, int val, vector<int>& V)
+void resize(int n, int val, ft::vector<int>& V)
 {
 	if (n < (int)V.size())
 		V.erase(V.begin() + n, V.end());

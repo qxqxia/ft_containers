@@ -6,7 +6,6 @@
 
 #include "iterator.hpp"
 
-
 namespace ft{
      //member types
      //member functions
@@ -26,7 +25,7 @@ namespace ft{
             vectIterator(vectIterator const &src):_element(src._element){}
             virtual ~vectIterator(void){}
 
-            vectIterator& operator=(vectIterator const &rhs){
+            vectIterator &operator=(const vectIterator &rhs){
                 if (this == &rhs)
                     return (*this);
                 this->_element = rhs._element;
