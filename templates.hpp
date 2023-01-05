@@ -128,6 +128,14 @@ template< class T1, class T2>
 std::pair<T1, T2> make_pair( T1 t, T2 u){
     return (pair<T1, T2>(t, u));
 }
-};
+}
 
+//binary_function used in the map/value_compare
+//binary_function is a base class for creating function objects with two arguments.
+template< class Arg1, class Arg2, class Result >
+struct binary_function{
+    typedef Arg1    first_argument_type;
+    typedef Arg2    second_argument_type;	
+    typedef Result  result_type;	
+};
 #endif

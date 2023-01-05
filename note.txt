@@ -56,5 +56,6 @@ resize(size_type): 对某个vector容器调用resize方法会在该容器尾部�
 
 reserve(size_type): 对某个vector容器调用reserve方法仅仅设置capacity这个值.
 
-
+friend function:
+友元函数和友元类的作用是一样的，它允许一个函数不需要通过其public接口就能够访问到类中的private和protected成员变量。
 
