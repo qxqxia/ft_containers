@@ -17,7 +17,21 @@ namespace ft{
     template< class Key, class T, class Compare = ft::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T>> >
     class map{
         private:
-            ft::Avltree<value_type> _avltree;
+            struct TreeNode{
+                ft::pair<const Key, T>      content;
+                TreeNode*                   parent;
+                TreeNode*                   left;
+                TreeNode*                   right;
+            };
+
+        private:
+            TreeNode*                   _root;         
+            TreeNode*                   _lastElem;      
+            size_type                   _size;        
+            allocator_type              _allocPair;     // Copy of allocator_type object
+            key_compare                 _comp;          // Copy of comp key_compare predicate
+            std::allocator<TreeNode>    _allocNode;     // Node's allocator
+
         public:
             typedef Key                                 key_type;   
             typedef T                                   mapped_type;  
@@ -60,36 +74,51 @@ namespace ft{
             //coplien form
             map(){}
 
-            explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()): _avltree{
-                (void)comp;
-                (void)alloc;
+            explicit map(const key_compare& comp = key_compare(), const allocator_type& alloc = allocator_type()):
+            _size(0), _allocPair(alloc), _comp(comp){
+                _lastElem = createNode(ft::pair<const key_type, mapped_type>());
+                _root = _lastElem;
+                _lastElem->left = _lastElem;
+                _lastElem->right = _lastElem;
             }
 
             template< class InputIt >
             map(InputIt first, InputIt last,
                 const key_compare& comp = key_compare(),
-                const allocator_type& alloc = allocator_type()) : _avltree{
-                    (void)comp;
-                    (void)alloc;
-                    insert(first, last);
+                const allocator_type& alloc = allocator_type(),
+                typename ft::enable_if<!ft::is_integral<InputIterator>::value >::type* = 0) : 
+                _size(0), _allocPair(alloc), _comp(comp){
+                    _lastElem = createNode(ft::pair<const key_type, mapped_type>());
+                    _root = _lastElem;
+                    _lastElem->left = _lastElem;
+                    _lastElem->right = _lastElem;
+                    
+                    for (; first != last; ++first)
+                        insert(*first);
             }
 
-            map(const map& other){
-                insert(other.begin(), other.end());
+            map(const map& other):
+             _size(0), _allocPair(other._allocPair), _comp(other._comp), _allocNode(other._allocNode)
+            {
+                _lastElem = createNode(ft::pair<const key_type, mapped_type>());
+                _root = _lastElem;
+                _lastElem->left = _lastElem;
+                _lastElem->right = _lastElem;
+
+                for (const_iterator it = other.begin(); it != other.end(); ++it)
+                    insert(*it);
             }
 
             ~map(){
-                clear(); //
+                clear();
+                deallocateNode(_lastElem);
 
             }
             
             map& operator=(const map& other){
-                if(this == &other)
-                    return (*this);
                 map tmp(other);
                 this->swap(tmp);
                 return (*this);
-
             }
 
             //iterators
@@ -131,7 +160,7 @@ namespace ft{
             }
 
             size_type size() const{
-                
+                return (_size);
             }
 
             size_type max_size() const{
@@ -140,7 +169,13 @@ namespace ft{
 
             //element access
             mapped_type& operator[] (const key_type& k){
+                TreeNode* tmp = searchNode(_root, k);
 
+                if (tmp){
+                    return tmp->content.second;
+                }
+                value_type val = make_pair<key_type, mapped_type>(k, mapped_type());
+                return insertNode(_rot, val)->content.second;
             }
 
             //modifiers
