@@ -5,6 +5,7 @@
 #include <cstddef>
 
 #include "iterator.hpp"
+#include "AVL.hpp"
 
 namespace ft{
     template<class T, class TreeNode >
@@ -133,8 +134,8 @@ namespace ft{
           return tmp;
         }
         
-        operator mapIterator<const T,  treeNode> (void){
-            return mapIterator<const T,  treeNode>(_root, _node, _null);
+        operator mapIterator<const T,  TreeNode> (void){
+            return mapIterator<const T,  TreeNode>(_root, _node, _null);
 	    }
 
         private:
