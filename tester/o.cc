@@ -1,5 +1,10 @@
-#include <iostream>     // std::cout
-#include <iterator>     // std::iterator, std::input_iterator_tag
+#include <iostream>
+#include "iostream"
+#include "map.hpp"
+#include "iterator.hpp"
+#include "mapIterator.hpp"
+#include "AVL.hpp"
+#include <algorithm>
 
 class MyIterator : public std::iterator<std::input_iterator_tag, int>
 {
