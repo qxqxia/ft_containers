@@ -271,7 +271,8 @@ namespace ft{
                 curr = root->left; //P is the left child of Q
                 root->left = curr->right; // after rotation, B is now the left child of Q
                 curr->right = root; //Q becomes the right child of P
-                //the new height
+                root->height = max(TreeHeight(root->left), TreeHeight(root->right)) + 1;
+                curr->height = max(TreeHeight(curr->left), TreeHeight(curr->right)) + 1;
                 return curr; //P is the new root now
             }             
 
@@ -287,6 +288,8 @@ namespace ft{
                 curr = root->right; //Q is the right child of P
                 root->right = curr->left;//after rotation, B is now the right child of P
                 curr->left = root; //P becomes the left child of Q
+                root->height = max(TreeHeight(root->left), TreeHeight(root->right)) + 1;
+                curr->height = max(TreeHeight(curr->left), TreeHeight(curr->right)) + 1;
                 return curr;//return new root
             }
 
@@ -348,7 +351,7 @@ namespace ft{
                     std::cout << "No duplicate values allowed!" << std::endl;
                     return root;
                 }
-
+                root->height = max(TreeHeight(root->left), TreeHeight(root->right)) + 1;
                 int bf = TreeGetBalanceFactor(root);
                 //LL
                 if (bf > 1 && new_node->value < root->left->value)
