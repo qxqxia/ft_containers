@@ -34,6 +34,8 @@ BstNode *Insert(BstNode *root, int data)
     return root;
 }
 
+
+
 bool Search(BstNode *root, int data)
 {
     if (root == NULL)
@@ -46,15 +48,15 @@ bool Search(BstNode *root, int data)
         return Search(root->right, data);
 }
 
-int FindMin(BstNode* root){
+BstNode* FindMin(BstNode* root){
     if (root == NULL){
         cout << "Error: Tree is empty\n";
-        return -1;
+        return root;
     }
     while(root->left != NULL){
         root = root->left;
     }
-    return root->data;
+    return root;
     /*recursive solution
     if (root == NULL){
         cout << "Error: Tree is empty\n";
@@ -67,17 +69,17 @@ int FindMin(BstNode* root){
     return FindMax(root->left);*/
 }
 
-int FindMax(BstNode* root){
+BstNode* FindMax(BstNode* root){
     //iterative solution
     if (root == NULL){
         cout << "Error: Tree is empty\n";
-        return -1;
+        return root;
     }
     BstNode* current = root;
     while(current->right != NULL){
         current = current->right;
     }
-    return current->data;
+    return current;
     /*recursive solution
     if (root == NULL){
         cout << "Error: Tree is empty\n";
@@ -103,6 +105,42 @@ int FindHeight(BstNode* root){
     if (root == NULL)
         return -1;
     return max(FindHeight(root->left), FindHeight(root->right)) + 1;
+}
+
+BstNode* Delete(BstNode* root, int data){
+    if (root == NULL)
+        return root;
+    else if(data < root->data){
+        root->left = Delete(root->left, data);
+    }
+    else if(data > root->data){
+        root->right = Delete(root->right, data);
+    }
+    else{
+        //case 1: no child
+        if (root->left == NULL && root->right == NULL){
+            delete root;
+            root = NULL;
+        }
+        //case 2:one child
+        else if(root->left == NULL){
+            BstNode* tmp = root;
+            root = root->right;
+            delete tmp;
+        }
+        else if(root->right == NULL){
+            BstNode* tmp = root;
+            root = root->left;
+            delete tmp;
+        }
+        //case 3: two child
+        else{
+            BstNode* tmp = FindMin(root->right);
+            root->data = tmp->data;
+            root->right = Delete(root->right, tmp->data);
+        }
+    }
+    return root;
 }
 
 void inorder(BstNode *root)
@@ -135,6 +173,44 @@ void postorder(BstNode *root)
     }
 }
 
+bool IsSubtreeLesser(BstNode* root, int value){
+    if (root == NULL)
+        return true;
+    if (root->data <= value 
+    && IsSubtreeLesser(root->left, value) 
+    && IsSubtreeLesser(root->right, value)){
+        return true;
+    }
+    else
+        return false; 
+}
+
+bool IsSubtreeGreater(BstNode* root, int value){
+    if (root == NULL)
+        return true;
+    if (root->data > value
+    && IsSubtreeGreater(root->left, value)
+    && IsSubtreeGreater(root->right, value)){
+        return true;
+    }
+    else
+        return false;
+}
+
+bool IsBinarySearchTree(BstNode* root){
+    if (root == NULL)
+        return true;
+    if(IsSubtreeLesser(root->left, root->data) //all nodes at left are lesser than root
+    && IsSubtreeGreater(root->right, root->data)//all nodes at right are greater than root
+    && IsBinarySearchTree(root->left) //left subtree is bst
+    && IsBinarySearchTree(root->right))//right subtree is bst
+    {
+        return true;
+    }
+    else
+        return false;
+}
+
 int main()
 {
     BstNode *root = NULL;
@@ -151,15 +227,15 @@ int main()
     cout << endl;
     postorder(root);
     cout << endl;
-    int high1 = 0;
-    high1 = FindHeight(root);
+    int high1 = FindHeight(root);
     cout << high1 << endl;
-    int n = 0;
-    n = FindMax(root);
-    cout << n << endl;
-    int n1= 0;
-    n1 = FindMin(root);
-    cout << n1 << endl;
+    BstNode *n = FindMax(root);
+    cout << n->data << endl;
+    BstNode *n1 = FindMin(root);
+    cout << n1->data << endl;
+    root = Delete(root, 10);
+    inorder(root);
+    cout << endl;
     int number;
     cout << "Enter number be searched\n";
     cin >> number;
