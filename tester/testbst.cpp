@@ -46,6 +46,65 @@ bool Search(BstNode *root, int data)
         return Search(root->right, data);
 }
 
+int FindMin(BstNode* root){
+    if (root == NULL){
+        cout << "Error: Tree is empty\n";
+        return -1;
+    }
+    while(root->left != NULL){
+        root = root->left;
+    }
+    return root->data;
+    /*recursive solution
+    if (root == NULL){
+        cout << "Error: Tree is empty\n";
+        return -1;
+    }
+    else if (root->left == NULL){
+        return root->data;
+    }
+    //serach in left subtree
+    return FindMax(root->left);*/
+}
+
+int FindMax(BstNode* root){
+    //iterative solution
+    if (root == NULL){
+        cout << "Error: Tree is empty\n";
+        return -1;
+    }
+    BstNode* current = root;
+    while(current->right != NULL){
+        current = current->right;
+    }
+    return current->data;
+    /*recursive solution
+    if (root == NULL){
+        cout << "Error: Tree is empty\n";
+        return -1;
+    }
+    else if (root->right == NULL){
+        return root->data;
+    }
+    //serach in right subtree
+    return FindMax(root->right);*/
+
+}
+
+int max(int left, int right){
+    if (left < right){
+        return right;
+    }
+    else
+        return left;
+}
+
+int FindHeight(BstNode* root){
+    if (root == NULL)
+        return -1;
+    return max(FindHeight(root->left), FindHeight(root->right)) + 1;
+}
+
 void inorder(BstNode *root)
 {
     if (root)
@@ -79,6 +138,7 @@ void postorder(BstNode *root)
 int main()
 {
     BstNode *root = NULL;
+
     root = Insert(root, 15);
     root = Insert(root, 10);
     root = Insert(root, 20);
@@ -91,8 +151,17 @@ int main()
     cout << endl;
     postorder(root);
     cout << endl;
+    int high1 = 0;
+    high1 = FindHeight(root);
+    cout << high1 << endl;
+    int n = 0;
+    n = FindMax(root);
+    cout << n << endl;
+    int n1= 0;
+    n1 = FindMin(root);
+    cout << n1 << endl;
     int number;
-    cout << "Enter number be serached\n";
+    cout << "Enter number be searched\n";
     cin >> number;
     if (Search(root, number) == true)
         cout << "Found\n";

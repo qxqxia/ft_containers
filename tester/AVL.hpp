@@ -81,8 +81,10 @@ namespace ft{
 
             /*min val in tree*/
             pointer minVal(pointer root)const{
-                if (root == _null)
-                    return _null;
+                if (root == _null){
+                    std::cout << "Error: Tree is empty\n";
+                    return -1;
+                }
                 while (root->left != _null)
                     root = root->left;
                 return root;
@@ -90,14 +92,14 @@ namespace ft{
 
             /* max val in tree*/
             pointer maxVal(pointer root) const {
-                 if (root == _null)
-                    return _null;
+                if (root == _null){
+                    std::cout << "Error: Tree is empty\n";
+                    return -1;
+                }
                 while (root->right != _null)
                     root = root->right;
                 return root;
-            }
-
-          
+            } 
 
             //delete one node
             bool delete_node(value_type const& val){ 
@@ -210,8 +212,8 @@ namespace ft{
 
             //height of the node
             int TreeHeight(pointer root){
-                if (!root)
-                    return 0;
+                if (root == NULL)
+                    return -1; //the height of leaf node is -1 + 1 = 0
                 else{
                     return max(TreeHeight(root->left), TreeHeight(root->right)) + 1;
                 }
