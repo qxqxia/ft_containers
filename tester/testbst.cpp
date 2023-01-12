@@ -3,7 +3,7 @@ using namespace std;
 
 struct BstNode
 {
-    int data;
+    int     data;
     BstNode *left;
     BstNode *right;
 };
@@ -33,8 +33,6 @@ BstNode *Insert(BstNode *root, int data)
     }
     return root;
 }
-
-
 
 bool Search(BstNode *root, int data)
 {
