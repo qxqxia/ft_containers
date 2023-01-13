@@ -59,7 +59,6 @@ void  printmap_val(std::string string, ft::map<Key, T> map)
 template < class Key, class T>
 void  printmap_key(std::string string, ft::map<Key, T> map)
 {
-  
   std::cout << string;
   for (typename ft::map<Key, T>::iterator it = map.begin(); it != map.end(); ++it)
       std::cout << it->first << ' ';
@@ -77,7 +76,7 @@ void map_constructor_test(void){
   first['b']=-42;
   printmap_val("map first val is: ", first);
   printmap_key("map first key is: ", first);
-   /*test  with as many elements as the range [first,last)*/
+  /*test  with as many elements as the range [first,last)*/
   ft::map<char,int> second (first.begin(),first.end());
   printmap_val("map second val is: ", second);
   printmap_key("map second key is: ", second);

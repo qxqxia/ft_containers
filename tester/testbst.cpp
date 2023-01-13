@@ -4,6 +4,7 @@ using namespace std;
 struct BstNode
 {
     int     data;
+    int     height;
     BstNode *left;
     BstNode *right;
 };
@@ -143,22 +144,33 @@ BstNode* Delete(BstNode* root, int data){
 
 void inorder(BstNode *root)
 {
-    if (root)
+    // if (root)
+    // {
+    //     inorder(root->left);
+    //     std::cout << root->data << " ";
+    //     inorder(root->right);
+    // }
+    if (!root)
     {
-        inorder(root->left);
-        std::cout << root->data << " ";
-        inorder(root->right);
+        //std::cout << '\n';
+        return ;
     }
+    //std::cout << "(go left) ";
+    inorder(root->left);
+    std::cout << root->data << " ";
+    //std::cout << "(go right) ";
+    inorder(root->right);
+
 }
 
 void preorder(BstNode *root)
 {
-    if (root)
-    {
-        std::cout << root->data << " ";
-        preorder(root->left);
-        preorder(root->right);
-    }
+    if (!root)
+        return  ;
+    std::cout << root->data << " ";
+    preorder(root->left);
+    preorder(root->right);
+    
 }
 
 void postorder(BstNode *root)
@@ -209,8 +221,74 @@ bool IsBinarySearchTree(BstNode* root){
         return false;
 }
 
+int rootGetBalanceFactor(BstNode* root){
+    if (root == NULL)
+        return 0;
+    return (FindHeight(root->left) - FindHeight(root->right));
+
+}
+
+BstNode* LL_rotation(BstNode* root){                                                                    
+    BstNode* curr; //P
+
+    curr = root->left; //P is the left child of Q
+    root->left = curr->right; // after rotation, B is now the left child of Q
+    curr->right = root; //Q becomes the right child of P
+    root->height = max(FindHeight(root->left), FindHeight(root->right)) + 1;
+    curr->height = max(FindHeight(curr->left), FindHeight(curr->right)) + 1;
+    return curr; //P is the new root now
+}  
+
+BstNode* RR_rotation(BstNode* root){ 
+    BstNode* curr; //Q
+
+    curr = root->right; //Q is the right child of P
+    root->right = curr->left;//after rotation, B is now the right child of P
+    curr->left = root; //P becomes the left child of Q
+    root->height = max(FindHeight(root->left), FindHeight(root->right)) + 1;
+    curr->height = max(FindHeight(curr->left), FindHeight(curr->right)) + 1;
+    return curr;//return new root
+}
+
+BstNode* RL_rotation(BstNode* root){
+    BstNode* curr;
+
+    curr = root->right;
+    curr->left = LL_rotation(curr);
+    return (RR_rotation(curr));
+}
+
+BstNode* LR_rotation(BstNode* root){
+    BstNode* curr;
+
+    curr = root->left;
+    curr->right = RR_rotation(curr);
+    return (LL_rotation(curr));
+}
+
+BstNode* balance(BstNode* curr){
+    int getBalance = rootGetBalanceFactor(curr);
+    if (getBalance > 1)
+    {
+        if(rootGetBalanceFactor(curr->left) > 0){
+            curr = LL_rotation(curr);
+        }
+        else
+            curr = LR_rotation(curr);
+    }
+    else if (getBalance < -1)
+    {
+        if (rootGetBalanceFactor(curr->right) > 0)
+            curr = RL_rotation(curr);
+        else
+            curr = RR_rotation(curr);
+    }
+    return curr;
+}
+
 int main()
 {
+    std::cout << __FUNCTION__ << std::endl;
     BstNode *root = NULL;
 
     root = Insert(root, 15);
@@ -219,21 +297,47 @@ int main()
     root = Insert(root, 25);
     root = Insert(root, 8);
     root = Insert(root, 12);
+    root = Insert(root, 5);
+    root = Insert(root, 3);
+    
     inorder(root);
     cout << endl;
+    
     preorder(root);
     cout << endl;
+    
     postorder(root);
     cout << endl;
+    
     int high1 = FindHeight(root);
     cout << high1 << endl;
+    
     BstNode *n = FindMax(root);
     cout << n->data << endl;
+    
     BstNode *n1 = FindMin(root);
     cout << n1->data << endl;
-    root = Delete(root, 10);
-    inorder(root);
+
+    if (IsBinarySearchTree(root)){
+        cout << "Is Binary Search Tree.\n";
+    }
+    
+    BstNode* n2 = balance(root);
+    cout << n2->data << endl;
+    
+    inorder(n2);
+    std::cout << '\n';
+
+    preorder(n2);
+    std::cout << '\n';
+    
+    postorder(n2);
+    std::cout << '\n';
+    
     cout << endl;
+    //root = Delete(root, 10);
+    //inorder(root);
+    //cout << endl;
     int number;
     cout << "Enter number be searched\n";
     cin >> number;

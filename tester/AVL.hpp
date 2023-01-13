@@ -8,26 +8,26 @@
 namespace ft{
 
     template<class T>
-    class rootNode{
+    class TreeNode{
 
         public:
             T           value; //T is pair<key, value>
             int         height;
-            rootNode    *parent;
-            rootNode    *left;
-            rootNode    *right;
+            TreeNode    *parent;
+            TreeNode    *left;
+            TreeNode    *right;
         
         public:
-            rootNode(): value(), left(NULL), right(NULL), parent(NULL) {}
+            TreeNode(): value(), parent(NULL), left(NULL), right(NULL){}
             
-            rootNode(T const &val, rootNode *left = NULL, rootNode *right = NULL, rootNode *parent = NULL):
+            TreeNode(T const &val, TreeNode *left = NULL, TreeNode *right = NULL, TreeNode *parent = NULL):
                     value(val), left(left), right(right), parent(parent) {}
                     
-            rootNode(rootNode const&src): value(src.value), left(src.left), parent(src.parent), right(src.right){}
+            TreeNode(TreeNode const&src): value(src.value), parent(src.parent), left(src.left), right(src.right){}
             
-            ~rootNode(){}
+            ~TreeNode(){}
             
-            rootNode & operator=(rootNode const &rhs){
+            TreeNode & operator=(TreeNode const &rhs){
                 if (this == &rhs) 
                     return *this; 
                 this->value = rhs.value;
@@ -40,9 +40,10 @@ namespace ft{
 
     template<class T,
             //class Compare,
-            class Node = ft::rootNode<T>,
+            class Node = ft::TreeNode<T>,
             class Allocator = std::allocator<Node> >
-    class AVL_root{
+    class AVL_tree
+    {
         
         public:
             typedef	 T                          value_type;  // T is pair<key, value>
@@ -54,14 +55,14 @@ namespace ft{
 			typedef	typename	allocator_type::const_pointer			const_pointer;
 			typedef	typename	allocator_type::size_type				size_type;
 
-            AVL_root() {
+            AVL_tree() {
                 this->_null =  allocator_type().allocate(1);
 				allocator_type().construct(_null, node_type());
                 this->_root = this->_null;
             }
     
             /* destructor */
-            ~AVL_root(){}
+            ~AVL_tree(){}
             
             /* get value*/
             pointer getRoot()const {return this->_root;}
@@ -120,7 +121,7 @@ namespace ft{
                 {
                     //case 1: no child
                     if (root->left !=_null && root->right != _null ) { 
-                        tmpNode = minVal(root->right);
+                        pointer tmpNode = minVal(root->right);
                         root = tmpNode;
                         root->right = DeleteNode(root->right, root->value);	
                     }
@@ -132,15 +133,15 @@ namespace ft{
                         allocator_type().deallocate(tmpNode, 1);
                     }
                     //case 2: one child
-                    else if (root->right  == _null) {
-                        tmpNode = root;
+                    else if (root->right == _null) {
+                        pointer tmpNode = root;
                         root = root->left;
                         allocator_type().destroy(tmpNode);
                         allocator_type().deallocate(tmpNode, 1);
                     }
                     //case 3: two child
                     else {
-                        tmpNode = root;
+                        pointer tmpNode = root;
                         allocator_type().destroy(tmpNode);
                         allocator_type().deallocate(tmpNode, 1);
                     }
@@ -149,7 +150,7 @@ namespace ft{
                 return (root);
             }
             
-            void swap(AVL_root &src){
+            void swap(AVL_tree &src){
                 pointer root = this->_root;
                 pointer null = this->_null;
 
@@ -162,7 +163,7 @@ namespace ft{
 
             pointer	successor(pointer node) const{
                 if (node->right != _null)
-                    return minVal(node->_right);
+                    return minVal(node->right);
                 if (node->parent == _null || node == maxVal(this->_root))
                     return _null;
                 pointer tmp = node->parent;
@@ -195,13 +196,23 @@ namespace ft{
             
             //delete root
             void destroy_root(){
-                destroy_root(this->_root);
+                destroy_tree(this->_root);
                 this->_root = _null;
             }
 
             void destory_null(){
                 allocator_type().destroy(_null);
                 allocator_type().deallocate(_null, 1);
+            }
+
+            void destory_tree(pointer node){
+                if (node == _null)
+                    return;
+                destory_tree(node->left);
+                destory_tree(node->right);
+                
+                allocator_type().destroy(node);
+                allocator_type().deallocate(node, 1);   
             }
 
             int max(int left, int right){
@@ -213,18 +224,18 @@ namespace ft{
             }
 
             //height of the node
-            int rootHeight(pointer root){
-                if (root == NULL)
+            int FindHeight(pointer root){
+                if (root == _null)
                     return -1; //the height of leaf node is -1 + 1 = 0
                 else{
-                    return max(rootHeight(root->left), rootHeight(root->right)) + 1;
+                    return max(FindHeight(root->left), FindHeight(root->right)) + 1;
                 }
             }
             
             pointer searchNode(pointer root, value_type const& val) const
             {
                 // We reached a leaf or root is empty
-                if (!root)
+                if (root == _null)
                     return 0;
                 else{
                     // Recursive loop until we find key
@@ -238,11 +249,11 @@ namespace ft{
             }
 
             int rootGetBalanceFactor(pointer root){
-                if (!root){
+                if (root == _null){
                     return 0;
                 }
                 else{
-                    return (rootHeight(root->left) - rootHeight(root->right));
+                    return (FindHeight(root->left) - FindHeight(root->right));
                 }
             }
 
@@ -275,8 +286,8 @@ namespace ft{
                 curr = root->left; //P is the left child of Q
                 root->left = curr->right; // after rotation, B is now the left child of Q
                 curr->right = root; //Q becomes the right child of P
-                root->height = max(rootHeight(root->left), rootHeight(root->right)) + 1;
-                curr->height = max(rootHeight(curr->left), rootHeight(curr->right)) + 1;
+                root->height = max(FindHeight(root->left), FindHeight(root->right)) + 1;
+                curr->height = max(FindHeight(curr->left), FindHeight(curr->right)) + 1;
                 return curr; //P is the new root now
             }             
 
@@ -292,8 +303,8 @@ namespace ft{
                 curr = root->right; //Q is the right child of P
                 root->right = curr->left;//after rotation, B is now the right child of P
                 curr->left = root; //P becomes the left child of Q
-                root->height = max(rootHeight(root->left), rootHeight(root->right)) + 1;
-                curr->height = max(rootHeight(curr->left), rootHeight(curr->right)) + 1;
+                root->height = max(FindHeight(root->left), FindHeight(root->right)) + 1;
+                curr->height = max(FindHeight(curr->left), FindHeight(curr->right)) + 1;
                 return curr;//return new root
             }
 
@@ -310,7 +321,7 @@ namespace ft{
                 pointer curr;
 
                 curr = root->right;
-                curr->right = LL_rotation(curr);
+                curr->left = LL_rotation(curr);
                 return (RR_rotation(curr));
             }
 
@@ -327,20 +338,22 @@ namespace ft{
                 pointer curr;
 
                 curr = root->left;
-                curr->left = RR_rotation(curr);
+                curr->right = RR_rotation(curr);
                 return (LL_rotation(curr));
             }
 
-            void inorder(pointer lroot){
-                if(lroot){
-                    inorder(lroot->left);
-                    std::cout << lroot->value << " "; 
-                    inorder(lroot->right);
+            void inorder(pointer root){
+                if (root == _null)
+                    return ;
+                else{
+                    inorder(root->left);
+                    std::cout << root->value << " "; 
+                    inorder(root->right);
                 }
             }
 
             pointer rootInsert(pointer root, pointer new_node){
-                if(root == NULL){
+                if(root == _null){
                     root = new_node;
                     std::cout << "Value inserted successfully" << std::endl;
                     return root;
@@ -355,7 +368,7 @@ namespace ft{
                     std::cout << "No duplicate values allowed!" << std::endl;
                     return root;
                 }
-                root->height = max(rootHeight(root->left), rootHeight(root->right)) + 1;
+                root->height = max(FindHeight(root->left), FindHeight(root->right)) + 1;
                 int bf = rootGetBalanceFactor(root);
                 //LL
                 if (bf > 1 && new_node->value < root->left->value)

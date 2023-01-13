@@ -95,8 +95,8 @@ namespace ft{
             if (node == _null){
                 return (_null);
             }
-            while (node->_left != _null){
-                node = node->_left;
+            while (node->left != _null){
+                node = node->left;
             }
             return (node);
         }
