@@ -321,7 +321,7 @@ namespace ft{
                 pointer curr;
 
                 curr = root->right;
-                curr->left = LL_rotation(curr);
+                curr->right = LL_rotation(curr);
                 return (RR_rotation(curr));
             }
 
@@ -338,7 +338,7 @@ namespace ft{
                 pointer curr;
 
                 curr = root->left;
-                curr->right = RR_rotation(curr);
+                curr->left = RR_rotation(curr);
                 return (LL_rotation(curr));
             }
 
