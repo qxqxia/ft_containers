@@ -175,12 +175,11 @@ void preorder(BstNode *root)
 
 void postorder(BstNode *root)
 {
-    if (root)
-    {
-        postorder(root->left);
-        postorder(root->right);
-        std::cout << root->data << " ";
-    }
+    if (!root)
+        return ;
+    postorder(root->left);
+    postorder(root->right);
+    std::cout << root->data << " ";  
 }
 
 bool IsSubtreeLesser(BstNode* root, int value){
