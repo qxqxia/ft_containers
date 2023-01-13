@@ -3,8 +3,8 @@ using namespace std;
 
 struct BstNode
 {
-    int     data;
-    int     height;
+    int data;
+    BstNode *parent;
     BstNode *left;
     BstNode *right;
 };
@@ -14,6 +14,7 @@ BstNode *GetNewNode(int data)
     BstNode *newNode = new BstNode();
     newNode->data = data;
     newNode->left = newNode->right = NULL;
+    newNode->parent = NULL;
     return newNode;
 }
 
@@ -35,7 +36,49 @@ BstNode *Insert(BstNode *root, int data)
     return root;
 }
 
-bool Search(BstNode *root, int data)
+/*Insert iteratively
+BstNode* InsertIter(BstNode* root, int data){
+    BstNode* node = GetNewNode(data);
+    if (root == NULL)
+        return node;
+    BstNode* tmp = root;
+    while (tmp != NULL) {
+        if (data < tmp->data) {
+            if (tmp->left == NULL) {
+                tmp->left = node;
+                node->parent = tmp;
+                break;
+            }
+            tmp = tmp->left;
+        } else {
+            if (tmp->right == NULL) {
+                tmp->right = node;
+                node->parent = tmp;
+                break;
+            }
+            tmp = tmp->right;
+        }
+    }
+    return root;
+}*/
+
+int NumNodes(BstNode *root)
+{
+    if (root == NULL)
+        return 0;
+    return (NumNodes(root->left) + NumNodes(root->right) + 1);
+}
+
+int IsLeaf(BstNode *root)
+{
+    if (root == NULL)
+        return 0;
+    if (root->left == NULL && root->right == NULL)
+        return 1;
+    return 0;
+}
+
+/*bool Search(BstNode* root, int data)
 {
     if (root == NULL)
         return false;
@@ -45,14 +88,73 @@ bool Search(BstNode *root, int data)
         return Search(root->left, data);
     else
         return Search(root->right, data);
+}*/
+
+BstNode *SearchIter(BstNode *root, int data)
+{
+    BstNode *current = root;
+    while (current != NULL)
+    {
+        if (data == current->data)
+        {
+            return current;
+        }
+        else if (data < current->data)
+        {
+            current = current->left;
+        }
+        else
+        {
+            current = current->right;
+        }
+    }
+    return NULL;
 }
 
-BstNode* FindMin(BstNode* root){
-    if (root == NULL){
+BstNode *inorderSuccessor(BstNode *root, int data)
+{
+    BstNode *current = SearchIter(root, data);
+    if (current == NULL)
+    {
+        return NULL;
+    }
+    if (current->right != NULL)
+    {
+        current = current->right;
+        while (current->left != NULL)
+        {
+            current = current->left;
+        }
+        return current;
+    }
+    BstNode *parent = root;
+    while (parent != NULL)
+    {
+        if (parent->data < data)
+        {
+            parent = parent->right;
+        }
+        else if (parent->data > data)
+        {
+            return parent;
+        }
+        else
+        {
+            return NULL;
+        }
+    }
+    return parent;
+}
+
+BstNode *FindMin(BstNode *root)
+{
+    if (root == NULL)
+    {
         cout << "Error: Tree is empty\n";
         return root;
     }
-    while(root->left != NULL){
+    while (root->left != NULL)
+    {
         root = root->left;
     }
     return root;
@@ -68,14 +170,17 @@ BstNode* FindMin(BstNode* root){
     return FindMax(root->left);*/
 }
 
-BstNode* FindMax(BstNode* root){
-    //iterative solution
-    if (root == NULL){
+BstNode *FindMax(BstNode *root)
+{
+    // iterative solution
+    if (root == NULL)
+    {
         cout << "Error: Tree is empty\n";
         return root;
     }
-    BstNode* current = root;
-    while(current->right != NULL){
+    BstNode *current = root;
+    while (current->right != NULL)
+    {
         current = current->right;
     }
     return current;
@@ -89,52 +194,62 @@ BstNode* FindMax(BstNode* root){
     }
     //serach in right subtree
     return FindMax(root->right);*/
-
 }
 
-int max(int left, int right){
-    if (left < right){
+int max(int left, int right)
+{
+    if (left < right)
+    {
         return right;
     }
     else
         return left;
 }
 
-int FindHeight(BstNode* root){
+int FindHeight(BstNode *root)
+{
     if (root == NULL)
         return -1;
     return max(FindHeight(root->left), FindHeight(root->right)) + 1;
 }
 
-BstNode* Delete(BstNode* root, int data){
+BstNode *Delete(BstNode *root, int data)
+{
     if (root == NULL)
         return root;
-    else if(data < root->data){
+    else if (data < root->data)
+    {
         root->left = Delete(root->left, data);
     }
-    else if(data > root->data){
+    else if (data > root->data)
+    {
         root->right = Delete(root->right, data);
     }
-    else{
-        //case 1: no child
-        if (root->left == NULL && root->right == NULL){
+    else
+    {
+        // case 1: no child
+        if (root->left == NULL && root->right == NULL)
+        {
             delete root;
             root = NULL;
         }
-        //case 2:one child
-        else if(root->left == NULL){
-            BstNode* tmp = root;
+        // case 2:one child
+        else if (root->left == NULL)
+        {
+            BstNode *tmp = root;
             root = root->right;
             delete tmp;
         }
-        else if(root->right == NULL){
-            BstNode* tmp = root;
+        else if (root->right == NULL)
+        {
+            BstNode *tmp = root;
             root = root->left;
             delete tmp;
         }
-        //case 3: two child
-        else{
-            BstNode* tmp = FindMin(root->right);
+        // case 3: two child
+        else
+        {
+            BstNode *tmp = FindMin(root->right);
             root->data = tmp->data;
             root->right = Delete(root->right, tmp->data);
         }
@@ -152,67 +267,39 @@ void inorder(BstNode *root)
     // }
     if (!root)
     {
-        //std::cout << '\n';
-        return ;
+        // std::cout << '\n';
+        return;
     }
-    //std::cout << "(go left) ";
+    // std::cout << "(go left) ";
     inorder(root->left);
     std::cout << root->data << " ";
-    //std::cout << "(go right) ";
+    // std::cout << "(go right) ";
     inorder(root->right);
-
 }
 
 void preorder(BstNode *root)
 {
     if (!root)
-        return  ;
+        return;
     std::cout << root->data << " ";
     preorder(root->left);
     preorder(root->right);
-    
 }
 
 void postorder(BstNode *root)
 {
     if (!root)
-        return ;
+        return;
     postorder(root->left);
     postorder(root->right);
-    std::cout << root->data << " ";  
+    std::cout << root->data << " ";
 }
 
-bool IsSubtreeLesser(BstNode* root, int value){
+bool IsSubtreeLesser(BstNode *root, int value)
+{
     if (root == NULL)
         return true;
-    if (root->data <= value 
-    && IsSubtreeLesser(root->left, value) 
-    && IsSubtreeLesser(root->right, value)){
-        return true;
-    }
-    else
-        return false; 
-}
-
-bool IsSubtreeGreater(BstNode* root, int value){
-    if (root == NULL)
-        return true;
-    if (root->data > value
-    && IsSubtreeGreater(root->left, value)
-    && IsSubtreeGreater(root->right, value)){
-        return true;
-    }
-    else
-        return false;
-}
-
-bool IsBinarySearchTree(BstNode* root){
-    if (root == NULL)
-        return true;
-    if(IsSubtreeLesser(root->left, root->data) //all nodes at left are lesser than root
-    && IsSubtreeGreater(root->right, root->data)//all nodes at right are greater than root
-    && IsBinarySearchTree(root->left) //left subtree is bst
-    && IsBinarySearchTree(root->right))//right subtree is bst
+    if (root->data <= value && IsSubtreeLesser(root->left, value) && IsSubtreeLesser(root->right, value))
     {
         return true;
     }
@@ -220,69 +307,31 @@ bool IsBinarySearchTree(BstNode* root){
         return false;
 }
 
-int rootGetBalanceFactor(BstNode* root){
+bool IsSubtreeGreater(BstNode *root, int value)
+{
     if (root == NULL)
-        return 0;
-    return (FindHeight(root->left) - FindHeight(root->right));
-
-}
-
-BstNode* LL_rotation(BstNode* root){                                                                    
-    BstNode* curr; //P
-
-    curr = root->left; //P is the left child of Q
-    root->left = curr->right; // after rotation, B is now the left child of Q
-    curr->right = root; //Q becomes the right child of P
-    root->height = max(FindHeight(root->left), FindHeight(root->right)) + 1;
-    curr->height = max(FindHeight(curr->left), FindHeight(curr->right)) + 1;
-    return curr; //P is the new root now
-}  
-
-BstNode* RR_rotation(BstNode* root){ 
-    BstNode* curr; //Q
-
-    curr = root->right; //Q is the right child of P
-    root->right = curr->left;//after rotation, B is now the right child of P
-    curr->left = root; //P becomes the left child of Q
-    root->height = max(FindHeight(root->left), FindHeight(root->right)) + 1;
-    curr->height = max(FindHeight(curr->left), FindHeight(curr->right)) + 1;
-    return curr;//return new root
-}
-
-BstNode* RL_rotation(BstNode* root){
-    BstNode* curr;
-
-    curr = root->right;
-    curr->right = LL_rotation(curr);
-    return (RR_rotation(curr));
-}
-
-BstNode* LR_rotation(BstNode* root){
-    BstNode* curr;
-
-    curr = root->left;
-    curr->left = RR_rotation(curr);
-    return (LL_rotation(curr));
-}
-
-BstNode* balance(BstNode* curr){
-    int getBalance = rootGetBalanceFactor(curr);
-    if (getBalance > 1)
+        return true;
+    if (root->data > value && IsSubtreeGreater(root->left, value) && IsSubtreeGreater(root->right, value))
     {
-        if(rootGetBalanceFactor(curr->left) > 0){
-            curr = LL_rotation(curr);
-        }
-        else
-            curr = LR_rotation(curr);
+        return true;
     }
-    else if (getBalance < -1)
+    else
+        return false;
+}
+
+bool IsBinarySearchTree(BstNode *root)
+{
+    if (root == NULL)
+        return true;
+    if (IsSubtreeLesser(root->left, root->data)      // all nodes at left are lesser than root
+        && IsSubtreeGreater(root->right, root->data) // all nodes at right are greater than root
+        && IsBinarySearchTree(root->left)            // left subtree is bst
+        && IsBinarySearchTree(root->right))          // right subtree is bst
     {
-        if (rootGetBalanceFactor(curr->right) > 0)
-            curr = RL_rotation(curr);
-        else
-            curr = RR_rotation(curr);
+        return true;
     }
-    return curr;
+    else
+        return false;
 }
 
 int main()
@@ -298,50 +347,41 @@ int main()
     root = Insert(root, 12);
     root = Insert(root, 5);
     root = Insert(root, 3);
-    
+
     inorder(root);
     cout << endl;
-    
+
     preorder(root);
     cout << endl;
-    
+
     postorder(root);
     cout << endl;
-    
+
     int high1 = FindHeight(root);
     cout << high1 << endl;
-    
+
     BstNode *n = FindMax(root);
     cout << n->data << endl;
-    
+
     BstNode *n1 = FindMin(root);
     cout << n1->data << endl;
 
-    if (IsBinarySearchTree(root)){
+    int n2 = NumNodes(root);
+    cout << n2 << endl;
+
+    if (IsBinarySearchTree(root))
+    {
         cout << "Is Binary Search Tree.\n";
     }
-    
-    BstNode* n2 = balance(root);
-    cout << n2->data << endl;
-    
-    inorder(n2);
-    std::cout << '\n';
 
-    preorder(n2);
-    std::cout << '\n';
-    
-    postorder(n2);
-    std::cout << '\n';
-    
-    cout << endl;
-    //root = Delete(root, 10);
-    //inorder(root);
-    //cout << endl;
+    root = Delete(root, 10);
+    inorder(root);
+    /*cout << endl;
     int number;
     cout << "Enter number be searched\n";
     cin >> number;
     if (Search(root, number) == true)
         cout << "Found\n";
     else
-        cout << "Not Found\n";
+        cout << "Not Found\n";*/
 }
