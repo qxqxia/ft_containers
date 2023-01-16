@@ -1,101 +1,123 @@
 #include <iostream>
-#include "map.hpp"
+#include <string>
+#include <deque>
 #include "iterator.hpp"
+#include "vecIterator.hpp"
+#include "vector.hpp"
+#include "map.hpp"
 #include "mapIterator.hpp"
-#include "AVL.hpp"
-#include <algorithm>
+#include "stack.hpp"
 
-//void resize(int, int, ft::vector<int>& );
+#if 1 // CREATE A REAL STL EXAMPLE
+#include <map>
+#include <stack>
+#include <vector>
+// namespace ft = std;
+#else
+#include <map.hpp>
+#include <stack.hpp>
+#include <vector.hpp>
+#endif
 
-/*int	main()
+#include <stdlib.h>
+
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
 {
-	ft::vector<int>		V(5, 10);
-	ft::vectIterator<ft::vector<int> >	it;
-	it = V.begin();
-	while (it != V.end())
-	{
-		std::cout << *it << std::endl;
-		it++;
-	}
-	
-	vector<int>	v;
-	ft::vectIterator	i(v);
-	
-	cout << v.size() << endl;
-	resize(10, 9, v);
-	cout << v.size() << endl;
-	
-	ft::vectIterator<random_access_iterator_tag>	i;
-	i = v.begin();
-	for(; i->pointer != v.end(); i->pointer++){ cout << *(i->pointer) << " " << endl; }
-	cout << endl;
-	
-}*/
+  int idx;
+  char buff[BUFFER_SIZE];
+};
 
-/*void resize(int n, int val, ft::vector<int>& V)
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
+
+template <typename T>
+class MutantStack : public ft::stack<T>
 {
-	if (n < (int)V.size())
-		V.erase(V.begin() + n, V.end());
-	else
-		V.insert(V.end(), n - (int)V.size(), val);
-}*/
+public:
+  MutantStack() {}
+  MutantStack(const MutantStack<T> &src) { *this = src; }
+  MutantStack<T> &operator=(const MutantStack<T> &rhs)
+  {
+    this->c = rhs.c;
+    return *this;
+  }
+  ~MutantStack() {}
 
-template < class Key, class T>
-void  printmap(std::string string, ft::map<Key, T> map) {
-   std::cout << string << std::endl;
-   for (typename ft::map<Key, T>::iterator it = map.begin(); it != map.end(); ++it)
-      std::cout << it->first << " => " << it->second << std::endl;
-}
+  typedef typename ft::stack<T>::container_type::iterator iterator;
 
-template < class Key, class T>
-void  printmap_val(std::string string, ft::map<Key, T> map)
+  iterator begin() { return this->c.begin(); }
+  iterator end() { return this->c.end(); }
+};
+
+int main(int argc, char **argv)
 {
-      std::cout << string;
-  for (typename ft::map<Key, T>::iterator it = map.begin(); it != map.end(); ++it)
-      std::cout << it->second << ' ';
-  std::cout << "\n";
-}
+  if (argc != 2)
+  {
+    std::cerr << "Usage: ./test seed" << std::endl;
+    std::cerr << "Provide a seed please" << std::endl;
+    std::cerr << "Count value:" << COUNT << std::endl;
+    return 1;
+  }
+  const int seed = atoi(argv[1]);
+  srand(seed);
 
-template < class Key, class T>
-void  printmap_key(std::string string, ft::map<Key, T> map)
-{
-  std::cout << string;
-  for (typename ft::map<Key, T>::iterator it = map.begin(); it != map.end(); ++it)
-      std::cout << it->first << ' ';
-  std::cout << "\n";
-}
+  ft::vector<std::string> vector_str;
+  ft::vector<int> vector_int;
+  ft::stack<int> stack_int;
+  ft::vector<Buffer> vector_buffer;
+  ft::stack<Buffer, std::deque<Buffer>> stack_deq_buffer;
+  ft::map<int, int> map_int;
 
-void map_constructor_test(void){
+  for (int i = 0; i < COUNT; i++)
+  {
+    vector_buffer.push_back(Buffer());
+  }
 
-  //printstr("---------Test constructor, destructor, operaror= ----------");
-  //printstr("[ info]");
-  ft::map<char,int> first;
-  printmap_val("map first val is: ", first);
-  printmap_key("map first key is: ", first);
-  first['a']=42;
-  first['b']=-42;
-  printmap_val("map first val is: ", first);
-  printmap_key("map first key is: ", first);
-  /*test  with as many elements as the range [first,last)*/
-  ft::map<char,int> second (first.begin(),first.end());
-  printmap_val("map second val is: ", second);
-  printmap_key("map second key is: ", second);
-  /*test copy*/
-  ft::map<char,int> third (second);
-  printmap_val("map third val is: ", third);
-  printmap_key("map third key is: ", third);
-  /*test operator = */
-  third['c'] = 0;
-  first = third;
-  printmap_val("map first val is: ", first);
-  printmap_key("map first key is: ", first);
+  for (int i = 0; i < COUNT; i++)
+  {
+    const int idx = rand() % COUNT;
+    vector_buffer[idx].idx = 5;
+  }
+  ft::vector<Buffer>().swap(vector_buffer);
+
+  try
+  {
+    for (int i = 0; i < COUNT; i++)
+    {
+      const int idx = rand() % COUNT;
+      vector_buffer.at(idx);
+      std::cerr << "Error: THIS VECTOR SHOULD BE EMPTY!!" << std::endl;
+    }
+  }
+  catch (const std::exception &e)
+  {
+    // NORMAL ! :P
+  }
+
+  for (int i = 0; i < COUNT; ++i)
+  {
+    map_int.insert(ft::make_pair(rand(), rand()));
+  }
+
+  int sum = 0;
+  for (int i = 0; i < 10000; i++)
+  {
+    int access = rand();
+    sum += map_int[access];
+  }
+  std::cout << "should be constant with the same seed: " << sum << std::endl;
+
+  {
+    ft::map<int, int> copy = map_int;
+  }
+  MutantStack<char> iterable_stack;
+  for (char letter = 'a'; letter <= 'z'; letter++)
+    iterable_stack.push(letter);
+  for (MutantStack<char>::iterator it = iterable_stack.begin(); it != iterable_stack.end(); it++)
+  {
+    std::cout << *it;
+  }
   std::cout << std::endl;
-}
-
-void _map(){
-	map_constructor_test();
-}
-
-int main(){
-	_map();
+  return (0);
 }

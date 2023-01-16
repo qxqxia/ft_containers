@@ -193,36 +193,38 @@ namespace ft
     template <class T>
     class AvlNode
     {
-        public:
-            typedef T   value_type;
+    public:
+        typedef T value_type;
 
-        public:
-            value_type* data;
-            int         height;
-            AvlNode*    parent;
-            AvlNode*    left;
-            AvlNode*    right;
+    public:
+        value_type *data;
+        int height;
+        int bf;
+        AvlNode *parent;
+        AvlNode *left;
+        AvlNode *right;
 
-        public:
-            AvlNode() : data(nullptr), parent(nullptr), left(nullptr), right(nullptr), height(0) {}
+    public:
+        AvlNode() : data(nullptr), parent(nullptr), left(nullptr), right(nullptr), height(0) {}
 
-            AvlNode(value_type val) : data(val), parent(nullptr), left(nullptr), right(nullptr), height(0) {}
+        AvlNode(value_type val) : data(val), parent(nullptr), left(nullptr), right(nullptr), height(0) {}
 
-            AvlNode(AvlNode const &src) : data(src.data), parent(src.parent), left(src.left), right(src.right), height(src.height) {}
+        AvlNode(AvlNode const &src) : data(src.data), parent(src.parent), left(src.left), right(src.right), height(src.height), bf(src.bf) {}
 
-            virtual ~AvlNode() {}
+        virtual ~AvlNode() {}
 
-            AvlNode &operator=(AvlNode const &rhs)
-            {
-                if (this == &rhs)
-                    return *this;
-                data = rhs.value;
-                left = rhs.left;
-                right = rhs.right;
-                parent = rhs.parent;
-                height = rhs.height;
-                return (*this);
-            }
+        AvlNode &operator=(AvlNode const &rhs)
+        {
+            if (this == &rhs)
+                return *this;
+            data = rhs.value;
+            left = rhs.left;
+            right = rhs.right;
+            parent = rhs.parent;
+            height = rhs.height;
+            bf = rhs.bf;
+            return (*this);
+        }
     };
 
     // why
