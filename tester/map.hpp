@@ -23,44 +23,48 @@ namespace ft
 	{
 		
     public:
-        typedef Key key_type;
-        typedef T mapped_type;
-        typedef Compare key_compare;
-        typedef Alloc allocator_type;
-        typedef ft::pair<const key_type, mapped_type> value_type;
+        typedef Key                                                                         key_type;
+        typedef T                                                                           mapped_type;
+        typedef Compare                                                                     key_compare;
+        typedef Alloc                                                                       allocator_type;
+        typedef ft::pair<const key_type, mapped_type>                                       value_type;
 
-        typedef typename allocator_type::reference reference;
-        typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::pointer pointer;
-        typedef typename allocator_type::const_pointer const_pointer;
-        typedef ft::AVL_tree<value_type, Compare, Alloc> tree;
-        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::iterator iterator;
-        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::const_iterator const_iterator;
-        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::reverse_iterator reverse_iterator;
-        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::const_reverse_iterator const_reverse_iterator;
-        typedef std::ptrdiff_t difference_type;
-        typedef size_t size_type;
+        typedef typename allocator_type::reference                                          reference;
+        typedef typename allocator_type::const_reference                                    const_reference;
+        typedef typename allocator_type::pointer                                            pointer;
+        typedef typename allocator_type::const_pointer                                      const_pointer;
+        typedef ft::AVL_tree<value_type, Compare, Alloc>                                    tree;
+        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::iterator                 iterator;
+        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::const_iterator           const_iterator;
+        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::reverse_iterator         reverse_iterator;
+        typedef typename ft::AVL_tree<value_type, Compare, Alloc>::const_reverse_iterator   const_reverse_iterator;
+        typedef std::ptrdiff_t                                                              difference_type;
+        typedef size_t                                                                      size_type;
 
         // value_compare
         class value_compare : public std::binary_function<value_type, value_type, bool>
         {
             friend class map;
 
-        protected:
-            Compare comp; // less<Key>
-            value_compare(Compare c) : comp(c) {}
+            protected:
+                Compare comp; // less<Key>
+                value_compare(Compare c) : comp(c) {}
 
-        public:
-            typedef bool result_type;
-            typedef value_type first_argument_type;
-            typedef value_type second_argument_type;
+            public:
+                typedef bool result_type;
+                typedef value_type first_argument_type;
+                typedef value_type second_argument_type;
 
-            bool operator()(const value_type &lhs, const value_type &rhs) const
-            {
-                return comp(lhs.first, rhs.first);
-            }
+                bool operator()(const value_type &lhs, const value_type &rhs) const
+                {
+                    return comp(lhs.first, rhs.first);
+                }
         };
 
+    private:
+            tree            _avl;
+            allocator_type  _alloc;
+            key_compare     _cmp;
     public:
         // coplien form
         explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type()) : _alloc(alloc), _cmp(comp) {}
@@ -150,10 +154,10 @@ namespace ft
             return;
         }
 
-        /*size_type erase(const key_type &k)
+        size_type erase(const key_type &k)
         {
             return (_avl.delete(k));
-        }*/
+        }
 
         void erase(iterator first, iterator last)
         {
@@ -165,7 +169,7 @@ namespace ft
             }
             for (size_t i = 0; i < keys.size(); i++)
                 _avl.delete(keys[i]);
-            return;
+            return ;
         }
 
         // swap
@@ -247,10 +251,7 @@ namespace ft
 
         allocator_type get_allocator() const { return (_avl.get_allocator()); }
 
-    private:
-        tree _avl;
-        allocator_type _alloc;
-        key_compare _cmp;
+    
     };
     /*relational operators*/
     template <class Key, class T, class Compare, class Alloc>
