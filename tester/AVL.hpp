@@ -82,11 +82,11 @@ namespace ft
         typedef typename value_type::second_type value;
 
     private:
-        ft::AvlNode<T> *_root;
-        node_alloc n_alloc;
-        pair_alloc p_alloc;
-        int _size;
-        Compare _comp;
+        ft::AvlNode<T>* _root;
+        node_alloc      n_alloc;
+        pair_alloc      p_alloc;
+        int             _size;
+        Compare         _comp;
 
     public:
         AVL_tree() : _root(nullptr), _size(0) {}
