@@ -1,5 +1,5 @@
-#ifndef TEMPLATES_HPP
-#define TEMPLATES_HPP
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
 #include <iostream>
 #include <cstddef>

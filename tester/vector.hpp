@@ -5,8 +5,9 @@
 #include <cstddef>
 #include <memory>
 #include <stdexcept>
-#include "vecIterator.hpp"
-#include "templates.hpp"
+#include <algorithm>
+//#include "vecIterator.hpp"
+#include "utils.hpp"
 #include "iterator.hpp"
 namespace ft
 {
@@ -31,266 +32,309 @@ namespace ft
         public:
             /*constructors & destructor*/
             //constructors
-            explicit vector(const allocator_type &alloc = allocator_type()) : m_alloc(alloc), m_data(nullptr), m_size(0), m_capacity(0)
+            explicit vector(const allocator_type &alloc = allocator_type()) : _allocator(alloc), _size(0), _capacity(0)
             {
+                this->_array = this->_allocator.allocate(this->_capacity);
             }
-            vector(const vector &x) : m_data(nullptr), m_size(0), m_capacity(0)
+
+            vector(const vector &x) : _allocator(x.get_allocator()), _size(x.size()), _capacity(x.capacity())
             {
-                *this = x;
+                this->_array = this->_allocator.allocate(this->_capacity);
+                std::copy(x.begin(), x.end(), this->begin());
             }
-            explicit vector(size_type n, const value_type &value = value_type(), const allocator_type &alloc = allocator_type()) : m_alloc(alloc), m_data(nullptr), m_size(0), m_capacity(0)
+
+            explicit vector(size_type n, const value_type &value, const allocator_type &alloc) : _allocator(alloc), _size(n), _capacity(n)
             {
-                m_data = m_alloc.allocate(n);
-                m_alloc.construct(m_data);
-                for (unsigned long long i = 0; i < n; i++)
-                {
-                    m_size = i;
-                    m_data[i] = std::move(value);
-                }
-                m_size++;
-                m_capacity = n;
+                this->_array = this->_allocator.allocate(this->_capacity);
+                //fill range with value
+                std::fill(this->begin(), this->end(), value);
+
             }
+
             template <class InputIterator>
-            vector(InputIterator first, InputIterator last, const allocator_type &alloc = allocator_type(), typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator()) : m_alloc(alloc), m_data(nullptr), m_size(0), m_capacity(0)
+            vector(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last, const allocator_type &alloc) : _allocator(alloc), _size(last - first), _capacity(last - first)
             {
-                size_t i = 0;
-                for (InputIterator it = first; it != last; it++)
-                    i++;
-                m_data = m_alloc.allocate(i + 1);
-                m_alloc.construct(m_data);
-                for (size_t j = 0; i > j; j++)
-                {
-                    m_size++;
-                    m_data[j] = *first;
-                    first++;
-                }
-                m_capacity = i;
+                this->_array = this->_allocator.allocate(this->_capacity);
+                std::copy(first, last, this->begin());
             }
+
             //destructor
             ~vector()
             {
-                m_alloc.deallocate(m_data, m_capacity);
+                for (long unsigned int i = 0; i < this->size(); ++i)
+                    this->get_allocator().destroy(this->_array + i);
+                this->_allocator.deallocate(this->_array, this->capacity());
             }
+
             /*operator overloads*/
             vector &operator=(const vector &x)
             {
-                m_alloc.deallocate(m_data, m_capacity);
-                m_data = m_alloc.allocate(x.m_capacity);
-                for (size_t i = 0; i < x.m_size; i++)
-                    m_data[i] = std::move(x.m_data[i]);
-                m_size = x.m_size;
-                m_capacity = x.m_capacity;
+                for(vector<T,Alloc>::iterator it = this->begin(); it < this->end(); ++it)
+                {
+                    this->_allocator.destroy(&*it);
+                }
+                this->_allocator.deallocate(this->_array, this->_capacity);
+                this->_capacity = x.capacity();
+                this->_size = x.size();
+                this->_array = this->_allocator.allocate(this->_capacity);
+                std::copy(x.begin(), x.end(), this->begin());
                 return (*this);
             }
 
             const_reference operator[](size_type n) const
             {
-                return (m_data[n]);
+                return (*(this->_array + n));
             }
+
             reference operator[](size_type n)
             {
-                return (m_data[n]);
+                return (*(this->_array + n));
             }
+
             /*member function*/
             //iterator
-            iterator begin() { return (iterator(m_data)); }
-            //allocator_type get_allocator() const { return (m_alloc); }
-            iterator end() { return (iterator(m_data + m_size)); }
-            const_iterator begin() const { return (iterator(m_data)); }
-            const_iterator end() const { return (iterator(m_data + m_size)); }
-            const_reverse_iterator rbegin() const { return (reverse_iterator(iterator(m_data + m_size))); }
-            const_reverse_iterator rend() const { return (reverse_iterator(iterator(m_data))); }
-            reverse_iterator rbegin() { return (reverse_iterator(end())); }
-            reverse_iterator rend() { return (reverse_iterator(begin())); }
+            iterator begin() { return (iterator(this->_array)); }
+            iterator end() { return (iterator(this->_array + this->_size)); }
+            const_iterator begin() const { return (const_iterator(this->_array)); }
+            const_iterator end() const { return (const_iterator(this->_array + this->_size)); }
+            const_reverse_iterator rbegin() const { return const_reverse_iterator(this->end()); }
+            const_reverse_iterator rend() const { return const_reverse_iterator(this->begin()); }
+            reverse_iterator rbegin() { return (reverse_iterator(this->end())); }
+            reverse_iterator rend() { return (reverse_iterator(this->begin())); }
+            
             //capacity
-            size_type size() const { return (m_size); }
-            size_type max_size() const { return (m_alloc.max_size()); } 
-            void resize(size_type n, value_type val = value_type())
+            size_type size() const { return (this->_size); }
+            size_type max_size() const { return (this->_allocator.max_size()); } 
+            
+            void resize(size_type n, value_type val)
             {
-                if (n > m_size)
+                if (n > this->size())
                 {
-                    if (n > m_capacity)
-                    {
-                        reserve(n);
-                        for (; m_size < n; m_size++)
-                            m_data[m_size] = val;
-                    }
-                    else
-                    {
-                        for (; m_size < n; m_size++)
-                            m_data[m_size] = val;
-                    }
+                    this->_array = this->_realloc(n);
+                    std::fill_n(this->end(), n - this->size(), val);
                 }
-                else
+                else if(n < this->size())
                 {
-                    for (size_t i = m_size; i > n; i--)
-                        m_data[m_size--].~value_type();
+                    for (int i = n; i < this->size(); ++i)
+                        this->get_allocator().destroy(this->_array + i);
                 }
+                this->_size = n;
             }
+
             void reserve(size_type n)
             {
-                if (n <= m_capacity)
-                    return;
-                value_type *tmp = m_alloc.allocate(n);
-                for (size_type i = 0; i < m_size; i++)
-                    tmp[i] = m_data[i];
-                m_alloc.deallocate(m_data, m_capacity);
-                m_data = tmp;
-                m_capacity = n;
+                this->_array = this->_realloc(n);
             }
-            size_type capacity() const { return (m_capacity); }
+
+            size_type capacity() const { return (this->_capacity); }
+            
             bool empty() const
             {
-                if (m_size == 0)
-                    return (1);
-                return (0);
+                return (this->_size == 0);
             }
+            
             //access
             reference at(size_type n)
             {
-                if (n > m_size)
+                if (n >= this->size())
                     throw std::out_of_range("Out of Range error");
-                return (m_data[n]);
+                return ((*this)[n]);
             }
             const_reference at(size_type n) const
             {
-                if (n > m_size)
+                if (n >= this->size())
                     throw std::out_of_range("Out of Range error");
-                return (m_data[n]);
+                return ((*this)[n]);
             }
-            reference front() { return (m_data[0]); }
-            const_reference front() const { return (m_data[0]); }
-            reference back() { return (m_data[m_size - 1]); }
-            const_reference back() const { return (m_data[m_size - 1]); }
+            
+            reference front() { return ((*this)[0]); }
+            const_reference front() const { return ((*this)[0]); }
+            reference back() { return ((*this)[this->size() - 1]); }
+            const_reference back() const { return ((*this)[this->size() - 1]); }
+            
             //modifiers
             void assign(size_type n, const value_type &val)
             {
-                if (m_capacity < n)
-                    reserve(n);
-                for (size_t i = 0; i < n; i++)
-                    m_data[i] = val;
-                m_size = n;
-            }
-            template <class InputIterator>
-            void assign(InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
-            {
-                difference_type i = ft::distance(first, last);
-                reserve(i);
-                i = 0;
-                m_size = 0;
-                while (first != last)
+                value_type  *newarr;
+
+                if (n > this->capacity())
                 {
-                    m_data[i] = *first;
-                    first++;
-                    m_size++;
-                    i++;
+                    if (n > this->max_size())
+                        throw std::length_error("length error");
+                    newarr = this->get_allocator().allocate(n);
+                    std::fill_n(newarr, n, val);
+                    for (int i = 0; i < this->size(); ++i)
+                        this->get_allocator().destroy(this->_array + i);
+                    this->get_allocator().deallocate(this->_array, this->capacity());
+                    this->_array = newarr;
+                    this->_capacity = n;
+                    this->_size = n;
+                }
+                else if (this->size() >= n)
+                {
+                    std::fill_n(this->begin(), n, val);
+                    for (int i = n; i < this->size(); ++i)
+                        this->get_allocator().destroy(this->_array + i);
+                    this->_size = n;
+                }
+                else
+                {   
+                    std::fill_n(this->begin(), this->size(), val);
+                    std::uninitialized_fill_n(\
+                        this->begin() + this->size() + 1, n - this->size(), val);
+                    this->_size = n;
                 }
             }
+            
+            template <class InputIterator>
+            void assign(typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
+            {
+                const size_type len = last - first;
+                value_type      *newarr;
+                InputIterator   mid;
+
+                if (len > this->capacity())
+                {
+                    if (len > this->max_size())
+                        throw std::length_error("length error");
+                    newarr = this->get_allocator().allocate(len);
+                    std::copy(first, last, newarr);
+                    for (int i = 0; i < this->size(); ++i)
+                        this->get_allocator().destroy(this->_array + i);
+                    this->get_allocator().deallocate(this->_array, this->capacity());
+                    this->_array = newarr;
+                    this->_capacity = len;
+                    this->_size = len;
+                }
+                else if (this->size() >= len)
+                {
+                    std::copy(first, last, this->begin());
+                    for (int i = len; i < this->size(); ++i)
+                        this->get_allocator().destroy(this->_array + i);
+                    this->_size = len;
+                }
+                else
+                {   
+                    mid = first + this->size();
+                    std::copy(first, mid, this->begin());
+                    std::uninitialized_copy(mid, last, this->begin() + this->size());
+                    this->_size = len;
+                }
+            }
+
             iterator insert(iterator position, const value_type &val)
             {
-                difference_type d = ft::distance(begin(), position);
-                if (m_size == 0)
-                    reserve(1);
-                else if (m_size + 1 > m_capacity)
-                    reserve(m_capacity * 2);
-                for (size_type i = d + 1; i <= m_size; i++)
-                    std::swap(m_data[d], m_data[i]);
-                m_alloc.construct(&m_data[d], val);
-                m_size++;
-                return (begin() + d);
+                unsigned int    index;
+
+                index = position - this->begin();
+                this->_array = this->_realloc_double(1);
+                position = this->begin() + index;
+                if (position != this->end())
+                    std::copy_backward(position, this->end(), this->end() + 1);
+                *position = val;
+                this->_size += 1;
+                return (position);
             }
+            
             void insert(iterator position, size_type n, const value_type &val)
             {
-                difference_type d = ft::distance(begin(), position);
-                long long j = d;
-                if ((m_size + n) > m_capacity)
-                {
-                    if (n > m_size)
-                        reserve(m_size + n);
-                    else
-                        reserve(m_capacity * 2);
-                }
-                else if (m_size == 0)
-                    reserve(n);
-                for (long long i = m_size - 1; i >= j; i--)
-                    m_alloc.construct(&m_data[i + n], m_data[i]);
-                for (size_type i = 0; i < n; i++)
-                    m_alloc.construct(&m_data[j++], val);
-                m_size += n;
+                unsigned int    index;
+
+                index = position - this->begin();
+                this->_array = this->_realloc_double(n);
+                position = this->begin() + index;
+                if (position != this->end())
+                    std::copy_backward(position, this->end(), this->end() + n);
+                std::fill_n(position, n, val);
+                this->_size += n;
             }
+            
             template <class InputIterator>
-            void insert(iterator position, InputIterator first, InputIterator last, typename enable_if<!is_integral<InputIterator>::value, InputIterator>::type = InputIterator())
+            void insert(iterator position, typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type first, InputIterator last)
             {
-                difference_type d = ft::distance(begin(), position);
-                difference_type range = ft::distance(first, last);
-                long long j = d;
-                size_t n = range;
-                if ((m_size + n) > m_capacity)
-                {
-                    if (n > m_size)
-                        reserve(m_size + n);
-                    else
-                        reserve(m_capacity * 2);
-                }
-                else if (m_size == 0)
-                    reserve(n);
-                for (long long i = m_size - 1; i >= j; i--)
-                    m_alloc.construct(&m_data[i + n], m_data[i]);
-                for (size_type i = 0; i < n; i++)
-                {
-                    m_alloc.construct(&m_data[j++], *first);
-                    first++;
-                }
-                m_size += n;
+                unsigned int    index;
+                unsigned int    size;
+                
+                size = last - first;
+                index = position - this->begin();
+                this->_array = this->_realloc_double(size);
+                position = this->begin() + index;
+                if (position != this->end())
+                    std::copy_backward(position, this->end(), this->end() + size);
+                std::copy(first, last, position);
+                this->_size += size;
             }
+            
             void push_back(const value_type &val)
             {
-                if (m_size == 0)
-                    reserve(1);
-                else if (m_capacity == m_size)
-                    reserve(m_capacity * 2);
-                m_data[m_size] = val;
-                m_size++;
+                size_type   n;
+
+                if (this->size() == this->capacity())
+                {
+                    if (this->capacity() == 0)
+                        n = 1;
+                    else
+                        n = this->capacity() * 2;
+                    this->_array = this->_realloc(n);
+                }
+                this->_array[this->size()] = val;
+                ++this->_size;
             }
-            void pop_back() { m_size--; }
-            void clear() { m_size = 0; }
+           
+            void pop_back() { 
+                if (this->_size > 0){
+                    this->get_allocator().destroy(&(*this)[this->_size() - 1]);
+                    --this->_size;
+                }
+            }
+            
+            void clear() { 
+                for(int i = 0; i < this->size(); ++i)
+                    this->get_allocator().destroy(this->_array + i);
+                this->_size = 0;
+            }
+
             iterator erase(iterator position)
             {
-                difference_type d = std::distance(begin(), position);
-                for (size_type i = d; i <= m_size - 1; i++)
-                    std::swap(m_data[d], m_data[i]);
-                m_size--;
-                return (begin() + d);
+                iterator    res(&*position);
+
+                this->get_allocator().destroy(&*position);
+                std::copy(position + 1, this->end(), position);   
+                this->get_allocator().destroy(&*(this->end() - 1));
+                --this->_size;
+                return (res);
             }
+
             iterator erase(iterator first, iterator last)
             {
-                iterator pos(first);
-                int i = 0;
-                while (last != end())
-                {
-                    *first = *last;
-                    first++;
-                    last++;
-                }
-                for (; first != last; first++)
-                    i++;
-                m_size -= i;
-                return (pos);
+                iterator    res(first);
+
+                for (ft::vector<T,A>::iterator it = first; it < last; ++it)
+                    this->get_allocator().destroy(&*it);
+                std::copy(last, this->end(), first);   
+                this->_size -= (last - first);
+                return (res);
             }
+
             void swap(vector &x)
             {
-                T *tmp_data;
-                size_type tmp_size;
+                pointer         tmp_arr;
+                allocator_type  tmp_alloc;
+                size_type       tmp_size;
+                size_type       tmp_capacity;
 
-                tmp_data = x.m_data;
-                x.m_data = this->m_data;
-                this->m_data = tmp_data;
-                tmp_size = x.m_size;
-                x.m_size = this->m_size;
-                this->m_size = tmp_size;
-                tmp_size = x.m_capacity;
-                x.m_capacity = this->m_capacity;
-                this->m_capacity = tmp_size;
+                tmp_arr = this->_array;
+                tmp_size = this->size();
+                tmp_capacity = this->capacity();
+                tmp_alloc = this->get_allocator();
+                this->_array = x._array;
+                this->_size = x.size();
+                this->_capacity = x.capacity();
+                this->_allocator = x.get_allocator();
+                x._array = tmp_arr;
+                x._size = tmp_size;
+                x._capacity = tmp_capacity;
+                x._allocator = tmp_alloc;
             }
 
             // Allocator
@@ -305,11 +349,46 @@ namespace ft
             size_type       _capacity;
 
             // Functions
-            pointer _realloc(size_type n);
+            pointer _realloc(size_type n){
+                pointer newarray;
 
-            pointer _realloc_double(size_type n);
+                if (n > this->capacity()){
+                    if (n > this->max_size())
+                        throw std::length_error("length error");
+                    newarray = this->get_allocator().allocate(n);
+                    std::copy(this->begin(), this->end(), newarray);
+                    for (long unsigned int i = 0; i < this->size(); ++i)
+                        this->get_allocator().destroy(this->_array + i);
+                    this->get_allocator().deallocate(this->_array, this->capacity());
+                    this->_array = newarray;
+                    this->_capacity = n;
+                    return (newarray);
+                }
+                else
+                    return (this->_array);
+            }
 
-            size_type   _check_len(size_type n);
+            pointer _realloc_double(size_type n){
+                size_type   len;
+
+                if (this->capacity() - this->size() < n){
+                    len = this->_check_len(n);
+                    this->_array = this->_realloc(len);
+                }
+                return (this->_array);
+            }
+
+            size_type   _check_len(size_type n){
+                size_type   len;
+    
+                if (this->max_size() - this->size() < n)
+                    throw std::length_error("length error");
+                len = this->size() + std::max(this->size(), n);
+                if (len < this->size() || len > this->max_size())
+                    return (this->max_size());
+                else
+                    return (len);
+            }
 
             //non member funstion overloads
             friend bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
