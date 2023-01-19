@@ -6,7 +6,6 @@
 #include <memory>
 #include <stdexcept>
 #include <algorithm>
-//#include "vecIterator.hpp"
 #include "utils.hpp"
 #include "iterator.hpp"
 namespace ft
@@ -28,7 +27,113 @@ namespace ft
             typedef ft::reverse_iterator<const_iterator>        const_reverse_iterator;
             typedef std::size_t                                 size_type;
             typedef ptrdiff_t                                   difference_type;
+        
+        private:
+                //attributes
+                pointer         _array;
+                allocator_type  _allocator;
+                size_type       _size;
+                size_type       _capacity;
 
+                // Functions
+                pointer _realloc(size_type n){
+                    pointer newarray;
+
+                    if (n > this->capacity()){
+                        if (n > this->max_size())
+                            throw std::length_error("length error");
+                        newarray = this->get_allocator().allocate(n);
+                        std::copy(this->begin(), this->end(), newarray);
+                        for (long unsigned int i = 0; i < this->size(); ++i)
+                            this->get_allocator().destroy(this->_array + i);
+                        this->get_allocator().deallocate(this->_array, this->capacity());
+                        this->_array = newarray;
+                        this->_capacity = n;
+                        return (newarray);
+                    }
+                    else
+                        return (this->_array);
+                }
+
+                pointer _realloc_double(size_type n){
+                    size_type   len;
+
+                    if (this->capacity() - this->size() < n){
+                        len = this->_check_len(n);
+                        this->_array = this->_realloc(len);
+                    }
+                    return (this->_array);
+                }
+
+                size_type   _check_len(size_type n){
+                    size_type   len;
+        
+                    if (this->max_size() - this->size() < n)
+                        throw std::length_error("length error");
+                    len = this->size() + std::max(this->size(), n);
+                    if (len < this->size() || len > this->max_size())
+                        return (this->max_size());
+                    else
+                        return (len);
+                }
+
+                //non member funstion overloads
+                friend bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+                {
+                    if (lhs.size() != rhs.size())
+                        return (lhs.size() == rhs.size());
+                    return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
+                }
+            
+                friend bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+                {
+                    return (!(lhs == rhs));
+                }
+        
+                friend bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+                {
+                    return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
+                }
+            
+                friend bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+                {
+                    return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
+                }
+        
+                friend bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+                {
+                    if (lhs < rhs || lhs == rhs)
+                        return (true);
+                    return (false);
+                }
+        
+                friend bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
+                {
+                    if (lhs > rhs || lhs == rhs)
+                        return (true);
+                    return (false);
+                }
+        
+                friend void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) {
+                    typename vector<T, Alloc>::pointer         tmp_arr;
+                    typename vector<T, Alloc>::allocator_type  tmp_alloc;
+                    typename vector<T, Alloc>::size_type       tmp_size;
+                    typename vector<T, Alloc>::size_type       tmp_capacity;
+
+                    tmp_arr = this->_array;
+                    tmp_size = this->size();
+                    tmp_capacity = this->capacity();
+                    tmp_alloc = this->get_allocator();
+                    this->_array = x._array;
+                    this->_size = x.size();
+                    this->_capacity = x.capacity();
+                    this->_allocator = x.get_allocator();
+                    x._array = tmp_arr;
+                    x._size = tmp_size;
+                    x._capacity = tmp_capacity;
+                    x._allocator = tmp_alloc;
+                }
+                
         public:
             /*constructors & destructor*/
             //constructors
@@ -309,7 +414,7 @@ namespace ft
             {
                 iterator    res(first);
 
-                for (ft::vector<T,A>::iterator it = first; it < last; ++it)
+                for (ft::vector<T,Alloc>::iterator it = first; it < last; ++it)
                     this->get_allocator().destroy(&*it);
                 std::copy(last, this->end(), first);   
                 this->_size -= (last - first);
@@ -338,98 +443,10 @@ namespace ft
             }
 
             // Allocator
-            allocator_type  get_allocator(void) const
-            { return allocator_type(this->_allocator); }
-
-        private:
-            //attributes
-            pointer         _array;
-            allocator_type  _allocator;
-            size_type       _size;
-            size_type       _capacity;
-
-            // Functions
-            pointer _realloc(size_type n){
-                pointer newarray;
-
-                if (n > this->capacity()){
-                    if (n > this->max_size())
-                        throw std::length_error("length error");
-                    newarray = this->get_allocator().allocate(n);
-                    std::copy(this->begin(), this->end(), newarray);
-                    for (long unsigned int i = 0; i < this->size(); ++i)
-                        this->get_allocator().destroy(this->_array + i);
-                    this->get_allocator().deallocate(this->_array, this->capacity());
-                    this->_array = newarray;
-                    this->_capacity = n;
-                    return (newarray);
-                }
-                else
-                    return (this->_array);
+            allocator_type  get_allocator(void) const{
+                return allocator_type(this->_allocator); 
             }
-
-            pointer _realloc_double(size_type n){
-                size_type   len;
-
-                if (this->capacity() - this->size() < n){
-                    len = this->_check_len(n);
-                    this->_array = this->_realloc(len);
-                }
-                return (this->_array);
-            }
-
-            size_type   _check_len(size_type n){
-                size_type   len;
-    
-                if (this->max_size() - this->size() < n)
-                    throw std::length_error("length error");
-                len = this->size() + std::max(this->size(), n);
-                if (len < this->size() || len > this->max_size())
-                    return (this->max_size());
-                else
-                    return (len);
-            }
-
-            //non member funstion overloads
-            friend bool operator==(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-            {
-                if (lhs.size() != rhs.size())
-                    return (lhs.size() == rhs.size());
-                return (ft::equal(lhs.begin(), lhs.end(), rhs.begin()));
-            }
-        
-            friend bool operator!=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-            {
-                return (!(lhs == rhs));
-            }
-      
-            friend bool operator<(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-            {
-                return (ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end()));
-            }
-        
-            friend bool operator>(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-            {
-                return (ft::lexicographical_compare(rhs.begin(), rhs.end(), lhs.begin(), lhs.end()));
-            }
-       
-            friend bool operator<=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-            {
-                if (lhs < rhs || lhs == rhs)
-                    return (true);
-                return (false);
-            }
-       
-            friend bool operator>=(const vector<T, Alloc> &lhs, const vector<T, Alloc> &rhs)
-            {
-                if (lhs > rhs || lhs == rhs)
-                    return (true);
-                return (false);
-            }
-     
-            friend void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) { x.swap(y); }
-        };
-        
+    };
 }
 
 #endif

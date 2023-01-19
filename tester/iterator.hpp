@@ -144,7 +144,7 @@ namespace ft
             }
             reverse_iterator operator-(difference_type n) const
             {
-                return (reverse_iterator(this->_it + n)));
+                return (reverse_iterator(this->_it + n));
             }
             reverse_iterator &operator--()
             {

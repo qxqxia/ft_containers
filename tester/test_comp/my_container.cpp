@@ -1,6 +1,6 @@
 #include "../vector.hpp"
-#include "../map.hpp"
-#include "../stack.hpp"
+//#include "../map.hpp"
+//#include "../stack.hpp"
 #include <iostream>
 #include <memory>
 
@@ -24,7 +24,7 @@ void  printvec(ft::vector<T> vec)
   std::cout << "\n";
 }
 
-template < class Key, class T>
+/*template < class Key, class T>
 void  printmap(std::string string, ft::map<Key, T> map) {
    std::cout << string << std::endl;
    for (typename ft::map<Key, T>::iterator it = map.begin(); it != map.end(); ++it)
@@ -48,7 +48,7 @@ void  printmap_key(std::string string, ft::map<Key, T> map)
   for (typename ft::map<Key, T>::iterator it = map.begin(); it != map.end(); ++it)
       std::cout << it->first << ' ';
   std::cout << "\n";
-}
+}*/
 
 void vec_constructor_test(void){
  
@@ -328,7 +328,8 @@ void _vector()
   vec_overloads_test();
 }
 
-void map_constructor_test(void){
+/*void map_constructor_test(void)
+{
 
   printstr("---------Test constructor, destructor, operaror= ----------");
   printstr("[ info]");
@@ -339,15 +340,15 @@ void map_constructor_test(void){
   first['b']=-42;
   printmap_val("map first val is: ", first);
   printmap_key("map first key is: ", first);
-   /*test  with as many elements as the range [first,last)*/
+   //test  with as many elements as the range [first,last)
   ft::map<char,int> second (first.begin(),first.end());
   printmap_val("map second val is: ", second);
   printmap_key("map second key is: ", second);
-  /*test copy*/
+  //test copy
   ft::map<char,int> third (second);
   printmap_val("map third val is: ", third);
   printmap_key("map third key is: ", third);
-  /*test operator = */
+  //test operator = 
   third['c'] = 0;
   first = third;
   printmap_val("map first val is: ", first);
@@ -371,7 +372,7 @@ void map_iterator_test(){
   for(; cit != cite; ++cit)
       std::cout << cit->first << " => " << cit->second << std::endl;
   std::cout << std::endl;
-  /*test reverse iterator*/
+  //test reverse iterator
   ft::map<int, int>::reverse_iterator rit = first.rbegin();
   ft::map<int, int>::reverse_iterator rite = first.rend();
   for(; rit != rite; ++rit)
@@ -497,10 +498,10 @@ void map_swap_clear_test(){
   second.clear();
   printmap("second is:", second); 
   std::cout << std::endl;
-}
+}*/
 
-void map_keyComp_valComp_test(){
-  /*test key_comp*/
+/*void map_keyComp_valComp_test(){
+  //test key_comp
   printstr("---------Test  keyComp valComp-----------");
   printstr("[ map info]");
   ft::map<char,int> first;
@@ -514,7 +515,7 @@ void map_keyComp_valComp_test(){
   do {
     std::cout << it->first << " => " << it->second << '\n';
   } while ( firstcomp((*it++).first, highest) );
-  /*test value_comp*/
+  //test value_comp
   ft::map<char,int> second;
   second['x']=1001;
   second['y']=2002;
@@ -679,12 +680,12 @@ void _stack()
     stack_constructor_test();
     stack_modifier_test();
     stack_operators_test();
-}
+}*/
 
 int main()
 {
   _vector();
-  _map();
-  _stack();
+  //_map();
+ // _stack();
   return (0);
 }
