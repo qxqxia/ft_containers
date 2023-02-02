@@ -113,8 +113,8 @@ namespace ft
                         return (true);
                     return (false);
                 }
-        
-                friend void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) {
+
+               /* friend void swap(vector<T, Alloc> &x, vector<T, Alloc> &y) {
                     typename vector<T, Alloc>::pointer         tmp_arr;
                     typename vector<T, Alloc>::allocator_type  tmp_alloc;
                     typename vector<T, Alloc>::size_type       tmp_size;
@@ -132,7 +132,7 @@ namespace ft
                     x._size = tmp_size;
                     x._capacity = tmp_capacity;
                     x._allocator = tmp_alloc;
-                }
+                }*/
                 
         public:
             /*constructors & destructor*/

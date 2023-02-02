@@ -205,9 +205,9 @@ namespace ft
         AvlNode *right;
 
     public:
-        AvlNode() : data(nullptr), parent(nullptr), left(nullptr), right(nullptr), height(0) {}
+        AvlNode() : data(NULL), parent(NULL), left(NULL), right(NULL), height(0) {}
 
-        AvlNode(value_type val) : data(val), parent(nullptr), left(nullptr), right(nullptr), height(0) {}
+        AvlNode(value_type val) : data(val), parent(NULL), left(NULL), right(NULL), height(0) {}
 
         AvlNode(AvlNode const &src) : data(src.data), parent(src.parent), left(src.left), right(src.right), height(src.height), bf(src.bf) {}
 
@@ -232,7 +232,7 @@ namespace ft
     bool operator==(const AvlNode<T> &lhs, const AvlNode<T> &rhs)
     {
         std::cout << "wow" << std::endl;
-        if (lhs->data == nullptr && rhs->data == nullptr)
+        if (lhs->data == NULL && rhs->data == NULL)
             return true;
         return (lhs->data == rhs.data);
     }
