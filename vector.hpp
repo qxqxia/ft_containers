@@ -29,6 +29,11 @@ namespace ft
             typedef typename ft::reverse_iterator<iterator>         reverse_iterator;
             typedef typename ft::reverse_iterator<const_iterator>   const_reverse_iterator;
         
+        protected:
+            allocator_type  _allocator;
+            pointer        _end_of_storage;
+            pointer        _begin;
+            pointer        _end;
         public:
             //default
             explicit vector(const allocator_type& alloc = allocator_type()) :
@@ -310,11 +315,7 @@ namespace ft
             allocator_type get_allocator() const{
                 return (this->_allocator);
             }
-        protected:
-            allocator_type  _allocator;
-            pointer        _end_of_storage;
-            pointer        _begin;
-            pointer        _end;
+      
     };
             
 //Non-member function overloads
