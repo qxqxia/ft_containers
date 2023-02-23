@@ -143,17 +143,24 @@ namespace ft
             return _allocator.max_size();
         }
 
-        /*void resize(size_type n, value_type val = value_type())
+        void resize(size_type n, value_type val = value_type())
         {
             if (n > max_size()){
                 throw(std::length_error("vector::size error"));
             }
             if (n <= size()){
                 for(; _size > n; _size--){
-
+                    _allocator.destroy(&_v[_size - 1]);
                 }
             }
-        }*/
+            else
+            {
+                reserve(n);
+                for(; _size < n; _size++){
+                    _allocator.construct(_v + _size, val);
+                }
+            }
+        }
 
         size_type capacity() const
         {
@@ -169,17 +176,27 @@ namespace ft
             return true;
         }
 
-        /*void reserve(size_type n)
+        void reserve(size_type n)
         {
             if (n > max_size())
             {
-                throw std::length_error("Vector length error");
+                throw std::length_error("vector length error");
             }
             if (n > capacity())
             {
+                T *tmp;
 
+                size_type old_capacity = _end_of_storage;
+                _end_of_storage = n;
+                tmp = _allocator.allocate(_end_of_storage);
+                for(size_type i = 0; i < _size; i++){
+                    _allocator.construct(tmp + i; *(_v + i));
+                    _allocator.destroy(&_v[i]);
+                }
+                _allocator.deallocate(_v, old_capacity);
+                _v = tmp;
             }
-        }*/
+        }
 
         // element access
         reference operator[](size_type n)
@@ -268,11 +285,19 @@ namespace ft
         iterator insert(iterator position, const value_type &val)
         {
             size_type diff = position - begin();
-            insert(position, 1, val);
-            return iterator(begin() + diff);
+            if (_size + 1 > _end_of_storage){
+                reserve(_size + 1);
+            }
+            for(size_type i = _size; i > diff; i--){
+                _allocator.construct(&_v[i], _v[i - 1]);
+                _allocator.destroy(&_v[i - 1]);
+            }
+            _allocator.construct(&_v[diff], val);
+            _size++;
+            return (begin() + diff);
         }
         // insert-fill
-        void insert(iterator position, size_type n, const value_type &val)
+        /*void insert(iterator position, size_type n, const value_type &val)
         {
             size_type diff = position - begin();
             resize(size() + n);
@@ -300,7 +325,7 @@ namespace ft
                 *(this->_end - 1 - i) = *pre_end--;
             for (size_type j = 0; j < n && first != last; j++, first++)
                 *(position + j) = *first;
-        }
+        }*/
 
         iterator erase(iterator position)
         {
