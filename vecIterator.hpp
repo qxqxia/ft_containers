@@ -9,7 +9,7 @@
 namespace ft{
      //member types
      //member functions
-     template <class T>
+     template <class iterator>
      class vectIterator : public ft::iterator<random_access_iterator_tag, T>{
         public:
             typedef typename ft::iterator<random_access_iterator_tag, T>::iterator_category    iterator_category;
