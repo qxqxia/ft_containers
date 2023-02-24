@@ -297,35 +297,44 @@ namespace ft
             return (begin() + diff);
         }
         // insert-fill
-        /*void insert(iterator position, size_type n, const value_type &val)
+        void insert(iterator position, size_type n, const value_type &val)
         {
             size_type diff = position - begin();
-            resize(size() + n);
-            position = begin() + diff;
-            size_type diff_right = (end() - n) - position; //插入到结尾距离
-            pointer pre_end = this->_end - n - 1;
-            for (size_type i = 0; i < diff_right; i++)
-                *(this->_end - 1 - i) = *pre_end--;
-            for (size_type i = 0; i < n; i++)
-                *(position + i) = val;
+            if (_size + n > _end_of_storage){
+                reserve(_size + n);
+            }
+            for (size_type i = _size; i > diff; i--){
+                _allocator.construct(&_v[i + n -1], _v[i - 1]);
+                _allocator.destroy(&_v[i - 1]);
+            }
+            for (size_type i = 0; i < n; i++){
+                _allocator.construct(&_v[diff + i], val);
+            }
+            _size += n;
         }
         // insert-range
         template <class InputIterator>
         void insert(iterator position, InputIterator first, InputIterator last,
-                    typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = NULL)
+                    typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0)
         {
-            size_type diff = position - begin();
-            size_type n = last - first;
-            size_type diff_right = end() - position;
-
-            resize(size() + n);
-            position = begin() + diff;
-            pointer pre_end = this->_end - n - 1;
-            for (size_type i = 0; i < diff_right; i++)
-                *(this->_end - 1 - i) = *pre_end--;
-            for (size_type j = 0; j < n && first != last; j++, first++)
-                *(position + j) = *first;
-        }*/
+            difference_type dist = 0;
+            for (InputIterator tmp = last; tmp != first; tmp--){
+                dist++;
+            }
+            difference_type diff = position - begin();
+            if (_size + dist > _end_of_storage){
+                reserve(_size + dist);
+            }
+            for (difference_type i = _size; i > diff; i--){
+                _allocator.construct(&_v[i + dist - 1], _v[i - 1]);
+                _allocator.destroy(&_v[i - 1]);
+            }
+            for (difference_type i = 0; i < dist; i++){
+                _allocator.construct(&_v[diff + i], *first);
+                first++;
+            }
+            _size += dist;
+        }
 
         iterator erase(iterator position)
         {
@@ -357,13 +366,15 @@ namespace ft
             return ret;
         }
 
-        /*void swap(vector &x)
+        void swap(vector &x)
         {
             if(*this == x){
                 return ;
             }
-            
-        }*/
+            ft::_swap(_size, x._size);
+            ft::_swap(_end_of_storage, x._end_of_storage);
+            ft::_swap(_v, x._v);
+        }
 
         void clear()
         {

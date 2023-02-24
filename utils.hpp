@@ -1,5 +1,5 @@
-#ifndef TEMPLATES_HPP
-#define TEMPLATES_HPP
+#ifndef UTILS_HPP
+#define UTILS_HPP
 
 #include <iostream>
 #include <cstddef>
@@ -128,14 +128,14 @@ template< class T1, class T2>
 std::pair<T1, T2> make_pair( T1 t, T2 u){
     return (pair<T1, T2>(t, u));
 }
+
+template<typename T>
+void    _swap(T &x, T &y){
+    T tmp = x;
+
+    x = y;
+    y = tmp;
 }
 
-//binary_function used in the map/value_compare
-//binary_function is a base class for creating function objects with two arguments.
-template< class Arg1, class Arg2, class Result >
-struct binary_function{
-    typedef Arg1    first_argument_type;
-    typedef Arg2    second_argument_type;	
-    typedef Result  result_type;	
 };
 #endif
