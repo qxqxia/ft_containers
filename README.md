@@ -2,10 +2,14 @@
 ## recode the STL containers with the C++98 standard
 + vector
 + map
+
 + stack
   - use your own vector class as default underlying container
+
 + std::iterator_traits
 + std::reverse_iterator
+
+
 + std::enable_if (implement it in a C++98 manner)
 + std::is_integral
 + std::equal and/or std::lexicographical_compare
