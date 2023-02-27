@@ -1,5 +1,5 @@
-#ifndef sTACK_HPP
-#define sTACK_HPP
+#ifndef STACK_HPP
+#define STACK_HPP
 
 #include "vector.hpp"
 
