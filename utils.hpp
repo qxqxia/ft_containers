@@ -72,8 +72,8 @@ bool lexicographical_compare( InputIt1 first1, InputIt1 last1, InputIt2 first2, 
 template<class T1, class T2> 
 struct pair{
     //Member types
-    typedef T1 first_type;
-    typedef T2 second_type;
+    // typedef T1 first_type;
+    // typedef T2 second_type;
     //Member variables
     T1 first;
     T2 second;
