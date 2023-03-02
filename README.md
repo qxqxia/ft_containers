@@ -20,8 +20,8 @@
 + std::iterator_traits
   - 5 type d'iterators
   ```
-      input_iterator
-      output_iterator
+      input_iterator;
+      output_iterator;
       forward_iterator: public input_iterator;
       bidirectional_iterator : public forward_iterator;
       random_access_iterator : public bidirectional_iterator;
