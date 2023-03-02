@@ -1,6 +1,6 @@
 # ft_containers
 ## recode the STL containers with the C++98 standard
-+ vector
+### vector
   - std::allocator
   - the inner data structure
   - The difference between vector and map iterator
@@ -10,7 +10,7 @@
   ```
   
   - use of friend keyword
-+ map
+### map
   - the inner data structure -> RBT or AVL...
   - pair and make_pair
   - map is ordered
@@ -19,12 +19,12 @@
   - use of friend keyword
   - insert or delete iterators
   
-+ set
+### set
 
-+ stack
+### stack
   - use your own vector class as default underlying container
 
-+ std::iterator_traits
+### std::iterator_traits
   - 5 main types of iterators
   ```
       input_iterator;
@@ -41,11 +41,11 @@
       pointer;
       reference;
   ```
-+ std::reverse_iterator
-
-
-+ std::enable_if (implement it in a C++98 manner)
-+ std::is_integral
+### std::reverse_iterator
+### others
+```
+    std::enable_if (implement it in a C++98 manner)
+    std::is_integral
 + std::equal and/or std::lexicographical_compare
 + std::pair
 + std::make_pair
