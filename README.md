@@ -3,10 +3,10 @@
 ### vector
   - std::allocator
   - the inner data structure
-  - The difference between vector and map iterator
+  - the difference between vector and map iterator
   ```
       vector: random_access_iterator;
-      map: bidirectional_iterator;
+      map:    bidirectional_iterator;
   ```
   
   - use of friend keyword
