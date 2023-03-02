@@ -82,9 +82,9 @@ namespace ft
             _allocator.deallocatorate(_v, _end_of_storage);
         }
 
-        vector &operator=(vector const &x)
+        vector &operator=(vector const &rhs)
         {
-            if (this == &x)
+            if (this == &rhs)
                 return (*this);
 
             assign(rhs.begin(), rhs.end());
@@ -195,7 +195,7 @@ namespace ft
                 tmp = _allocator.allocatorate(_end_of_storage);
                 for (size_type i = 0; i < _size; i++)
                 {
-                    _allocator.construct(tmp + i; *(_v + i));
+                    _allocator.construct(tmp + i, *(_v + i));
                     _allocator.destroy(&_v[i]);
                 }
                 _allocator.deallocatorate(_v, old_capacity);

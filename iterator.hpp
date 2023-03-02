@@ -123,7 +123,7 @@ namespace ft{
             }
             reverse_iterator  operator++(int){
                 reverse_iterator tmp(*this);
-                _it--
+                _it--;
                 return tmp;
             }
             reverse_iterator& operator+=(difference_type n){

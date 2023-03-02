@@ -114,32 +114,32 @@ namespace ft
     // non-memeber functions overloads
     // relational operators
     template <class T,class Allocator>
-    bool operator == (const vectIterator<T, Allocator>& lhs, const vectIterator<T, Allocator>& rhs){
+    bool operator == (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return (lhs.base() == rhs.base());
     }
 
     template <class T,class Allocator>
-    bool operator!= (const vectIterator<T, Allocator>& lhs, const vectIterator<T, Allocator>& rhs){
+    bool operator!= (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return (lhs.base() != rhs.base());
     }
 
     template <class T,class Allocator>
-    bool operator<  (const vectIterator<T, Allocator>& lhs, const vectIterator<T, Allocator>& rhs){
+    bool operator<  (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return (lhs.base() < rhs.base());
     }
 
     template <class T,class Allocator>
-    bool operator<= (const vectIterator<T, Allocator>& lhs, const vectIterator<T, Allocator>& rhs){
+    bool operator<= (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return !(rhs < lhs);
     }
 
     template <class T,class Allocator>
-    bool operator>  (const vectIterator<T, Allocator>& lhs, const vectIterator<T, Allocator>& rhs){
+    bool operator>  (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return rhs < lhs;
     }
 
     template <class T,class Allocator>
-    bool operator>= (const vectIterator<T, Allocator>& lhs, const vectIterator<T, Allocator>& rhs){
+    bool operator>= (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return !(lhs < rhs);
     }
     //std::operator+
@@ -149,7 +149,7 @@ namespace ft
     }
     //std::operator-
     template <class T,class Allocator>
-    typename vectIterator<T, Allocator>::difference_type operator-(const vectIterator<T,Allocator>& lhs, const vectIterator<T,Allocator>& rhs){
+    typename vectIterator<T>::difference_type operator-(const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return (lhs.base() - rhs.base());
     }
 
