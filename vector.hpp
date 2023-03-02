@@ -10,7 +10,8 @@
 
 namespace ft
 {
-    template <class T, class Allocator = std::allocator<T>>
+    template <
+        class T, class Allocator = std::allocator<T> >
     class vector
     {
     public:
@@ -40,13 +41,13 @@ namespace ft
         // default
         explicit vector(const allocator_type &allocator = allocator_type()) : _allocator(allocator), _end_of_storage(0), _size(0)
         {
-            _v = _allocator.allocatorate(0);
+            _v = _allocator.allocate(0);
         }
 
         // avec size
         explicit vector(size_type n, const value_type &val = value_type(), const allocator_type &allocator = allocator_type()) : _allocator(allocator), _end_of_storage(n), _size(n)
         {
-            _v = _allocator.allocatorate(n);
+            _v = _allocator.allocate(n);
             for (size_type i = 0; i < _size; i++)
             {
                 _allocator.construct(_v + i, val);
@@ -79,7 +80,7 @@ namespace ft
         ~vector(void)
         {
             clear();
-            _allocator.deallocatorate(_v, _end_of_storage);
+            _allocator.deallocate(_v, _end_of_storage);
         }
 
         vector &operator=(vector const &rhs)
@@ -192,13 +193,13 @@ namespace ft
 
                 size_type old_capacity = _end_of_storage;
                 _end_of_storage = n;
-                tmp = _allocator.allocatorate(_end_of_storage);
+                tmp = _allocator.allocate(_end_of_storage);
                 for (size_type i = 0; i < _size; i++)
                 {
                     _allocator.construct(tmp + i, *(_v + i));
                     _allocator.destroy(&_v[i]);
                 }
-                _allocator.deallocatorate(_v, old_capacity);
+                _allocator.deallocate(_v, old_capacity);
                 _v = tmp;
             }
         }
