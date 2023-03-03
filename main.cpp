@@ -1,9 +1,10 @@
 #include <iostream>
 #include "vector.hpp"
+#include <memory>
 
 int main()
 {
-    /*std::vector<int> v1;
+    ft::vector<int> v1;
 
     for(int i = 1; i < 10; i++){
         v1.push_back(i);
@@ -16,7 +17,7 @@ int main()
     for(int i = 0; i < v1.size(); i++){
         std::cout << ' ' << v1[i];
     }
-    std::cout << '\n';*/
+    std::cout << '\n';
     ft::vector<int>::size_type sz;
 
     ft::vector<int> foo;
@@ -42,7 +43,7 @@ int main()
         if (sz != bar.capacity())
         {
             sz = bar.capacity();
-            std::cout << "capacoty changed: " << sz << '\n';
+            std::cout << "capacity changed: " << sz << '\n';
         }
     }
     return 0;

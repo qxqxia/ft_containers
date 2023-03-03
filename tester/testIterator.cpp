@@ -9,8 +9,7 @@ class Integers{
         //default constructor
         Integers() { for (int i = 0; i < size; i++) m_data[i] = 1; }
 
-        class Iterator{
-           
+        class Iterator{       
             public:
                 typedef typename std::random_access_iterator_tag iterator_category;
                 typedef typename std::ptrdiff_t                  difference_type;

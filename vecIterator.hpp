@@ -13,9 +13,6 @@ namespace ft
     template <typename Iterator>
     class vectIterator : public ft::iterator<random_access_iterator_tag, Iterator>
     {
-    protected:
-        Iterator _element;
-
     public:
         typedef Iterator iterator_type;
         typedef typename ft::iterator_traits<Iterator>::iterator_category iterator_category;
@@ -23,7 +20,10 @@ namespace ft
         typedef typename ft::iterator_traits<Iterator>::difference_type difference_type;
         typedef typename ft::iterator_traits<Iterator>::pointer pointer;
         typedef typename ft::iterator_traits<Iterator>::reference reference;
-
+    
+    protected:
+            Iterator _element;
+    
     public:
         /*constructeur and destructeur*/
         vectIterator() : _element() {}
@@ -110,10 +110,58 @@ namespace ft
         {
             return *(_element + n);
         }
+
     };
+    	template<typename _IterL, typename _IterR>
+	bool	operator==(const VectorIterator<_IterL>& lhs, const VectorIterator<_IterR>& rhs)
+	{
+		return lhs.base() == rhs.base();
+	}
+
+	template<typename _IterL, typename _IterR>
+	bool	operator!=(const VectorIterator<_IterL>& lhs, const VectorIterator<_IterR>& rhs)
+	{
+		return lhs.base() != rhs.base();
+	}
+
+	template<typename _IterL, typename _IterR>
+	bool	operator<(const VectorIterator<_IterL>& lhs, const VectorIterator<_IterR>& rhs)
+	{
+		return lhs.base() < rhs.base();
+	}
+
+	template<typename _IterL, typename _IterR>
+	bool	operator>(const VectorIterator<_IterL>& lhs, const VectorIterator<_IterR>& rhs)
+	{
+		return rhs < lhs;
+	}
+
+	template<typename _IterL, typename _IterR>
+	bool	operator<=(const VectorIterator<_IterL>& lhs, const VectorIterator<_IterR>& rhs)
+	{
+		return !(rhs < lhs);
+	}
+
+	template<typename _IterL, typename _IterR>
+	bool	operator>=(const VectorIterator<_IterL>& lhs, const VectorIterator<_IterR>& rhs)
+	{
+		return !(lhs < rhs);
+	}
+
+	template<typename _Iter>
+	VectorIterator<_Iter>	operator+(typename VectorIterator<_Iter>::difference_type _n, const VectorIterator<_Iter> &_x)
+	{
+		return VectorIterator<_Iter>(_x.base() + _n);
+	}
+
+	template<typename _IterL, typename _IterR>
+	typename VectorIterator<_IterL>::difference_type	operator-(const VectorIterator<_IterL> &lhs, const VectorIterator<_IterR> &rhs)
+	{
+		return lhs.base() - rhs.base();
+    }
     // non-memeber functions overloads
     // relational operators
-    template <class T,class Allocator>
+    /*template <class T,class Allocator>
     bool operator == (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return (lhs.base() == rhs.base());
     }
@@ -135,7 +183,7 @@ namespace ft
 
     template <class T,class Allocator>
     bool operator>  (const vectIterator<T>& lhs, const vectIterator<T>& rhs){
-        return rhs < lhs;
+        return (rhs < lhs);
     }
 
     template <class T,class Allocator>
@@ -145,13 +193,13 @@ namespace ft
     //std::operator+
     template <class T>
     vectIterator<T> operator+(typename vectIterator<T>::difference_type n, const vectIterator<T>& _it){
-        return vecIterator<T>(_it.base() + n);
+        return (_it.base() + n);
     }
     //std::operator-
     template <class T,class Allocator>
     typename vectIterator<T>::difference_type operator-(const vectIterator<T>& lhs, const vectIterator<T>& rhs){
         return (lhs.base() - rhs.base());
-    }
+    }*/
 
 }
 
