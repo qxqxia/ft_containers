@@ -37,12 +37,6 @@ namespace ft{
     //迭代器类型萃取可以提取迭代器的各个类型
     template<class Iterator>
     struct iterator_traits{
-        /*迭代器要求五个类型定义
-        value_type:迭代器所指对象的类型
-        difference_type:两个迭代器之间距离的类型
-        pointer:迭代器所指对象的原生指针类型
-        reference:迭代器所指对象的原生引用类型
-        iterator_category:迭代器的类型。*/
         typedef typename Iterator::iterator_category    iterator_category;
         typedef typename Iterator::value_type           value_type;
         typedef typename Iterator::difference_type      difference_type;

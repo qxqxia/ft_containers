@@ -4,11 +4,12 @@
 #include <iostream>
 #include <memory>
 
-void printstr(std::string string) {
+void printstr(std::string string)
+{
   std::cout << string << std::endl;
 }
 
-template<class T>
+template <class T>
 void print_size(ft::vector<T> vec)
 {
   std::cout << "size: " << vec.size() << std::endl;
@@ -16,11 +17,11 @@ void print_size(ft::vector<T> vec)
   std::cout << "capacity: " << vec.capacity() << std::endl;
 }
 
-template<class T>
-void  printvec(ft::vector<T> vec)
+template <class T>
+void printvec(ft::vector<T> vec)
 {
   for (typename ft::vector<T>::iterator it = vec.begin(); it != vec.end(); ++it)
-     std::cout << *it << ' ';
+    std::cout << *it << ' ';
   std::cout << "\n";
 }
 
@@ -43,23 +44,24 @@ void  printmap_val(std::string string, ft::map<Key, T> map)
 template < class Key, class T>
 void  printmap_key(std::string string, ft::map<Key, T> map)
 {
-  
+
   std::cout << string;
   for (typename ft::map<Key, T>::iterator it = map.begin(); it != map.end(); ++it)
       std::cout << it->first << ' ';
   std::cout << "\n";
 }*/
 
-void vec_constructor_test(void){
- 
+void vec_constructor_test(void)
+{
+
   printstr("---------Test constructor-----------\n");
   printstr("[ vector info]");
-  ft::vector<int> first(4);                                // empty vector of ints
+  ft::vector<int> first(4);                            // empty vector of ints
   ft::vector<int> second(4, 42);                       // four ints with value 42
-  ft::vector<int> third (second.begin(),second.end());  // iterating through second
-  ft::vector<int> fourth (third);
-  int ints[] = {0,-42,42,1,442}; 
-  ft::vector<int> fifth (ints,ints + sizeof(ints) / sizeof(int));
+  ft::vector<int> third(second.begin(), second.end()); // iterating through second
+  ft::vector<int> fourth(third);
+  int ints[] = {0, -42, 42, 1, 442};
+  ft::vector<int> fifth(ints, ints + sizeof(ints) / sizeof(int));
   printvec(first);
   printvec(second);
   printvec(third);
@@ -80,36 +82,37 @@ void vec_iterator_test(void)
   printstr("---------Test iterator-----------\n");
   printstr("[ vector info]");
   ft::vector<int> vec;
-  for(int i = 1; i < 6; i++)
+  for (int i = 1; i < 6; i++)
     vec.push_back(i);
   printvec(vec);
   ft::vector<int>::iterator it = vec.begin();
-  std::cout << "iterator begin(it) is: "<< *it << std::endl;
+  std::cout << "iterator begin(it) is: " << *it << std::endl;
   ft::vector<int>::iterator ite = vec.end();
-  std::cout << "iterator end(ite) is: "<< *(ite - 1) << std::endl;
+  std::cout << "iterator end(ite) is: " << *(ite - 1) << std::endl;
   it++;
-  std::cout << "begin++(it++) is: "<< *it << std::endl;
+  std::cout << "begin++(it++) is: " << *it << std::endl;
   ite--;
-  std::cout << "end--(ite--) is: "<< *(ite - 1) << std::endl;
+  std::cout << "end--(ite--) is: " << *(ite - 1) << std::endl;
   it += 1;
-  std::cout << "it + 1 is: "<< *it << std::endl;
+  std::cout << "it + 1 is: " << *it << std::endl;
   ite -= 1;
-  std::cout << "ite - 1  is: "<< *(ite - 1) << std::endl;
-  
+  std::cout << "ite - 1  is: " << *(ite - 1) << std::endl;
+
   ft::vector<int>::const_iterator cit = vec.begin();
   std::cout << "const_iterator begin is: " << *cit << std::endl;
   ft::vector<int>::const_iterator cite = vec.end();
-  std::cout << "const_iterator end is: " <<*(cite - 1) << std::endl;
-  
+  std::cout << "const_iterator end is: " << *(cite - 1) << std::endl;
+
   ft::vector<int>::reverse_iterator rit = vec.rbegin();
   std::cout << "reverse_iterator rbegin is: " << *rit << std::endl;
   ft::vector<int>::reverse_iterator rite = vec.rend();
-  std::cout <<  "reverse_iterator rend is: " << *(rite - 1) << std::endl;
-  
+  std::cout << "reverse_iterator rend is: " << *(rite - 1) << std::endl;
+
   ft::vector<int>::const_reverse_iterator crit = vec.rbegin();
   std::cout << "const_reverse_iterator rbegin is: " << *crit << std::endl;
   ft::vector<int>::const_reverse_iterator crite = vec.rend();
-  std::cout << "const_rend is: " << *(crite - 1) << std::endl << std::endl; 
+  std::cout << "const_rend is: " << *(crite - 1) << std::endl
+            << std::endl;
 }
 /*
 ** test size , max_size, capatity, empty
@@ -119,19 +122,19 @@ void vec_size_test()
   printstr("---------Test size/max_size/empty/capatity-----------\n");
   printstr("[ vector info]");
   ft::vector<int> vec;
-  std::cout << "int: " << (vec.empty() == true ? "vec is empty" : "vec is not empt" )<< std::endl;
+  std::cout << "int: " << (vec.empty() == true ? "vec is empty" : "vec is not empt") << std::endl;
   vec.push_back(1);
-  std::cout << "int: " << (vec.empty() == true ? "vec is empty" : "vec is not empt" )<< std::endl;
+  std::cout << "int: " << (vec.empty() == true ? "vec is empty" : "vec is not empt") << std::endl;
   print_size(vec);
   std::cout << std::endl;
   ft::vector<char> vecchar;
-  std::cout << "char: " << (vecchar.empty() == true ? "vecchar is empty" : "vechar is not empt" )<< std::endl;
+  std::cout << "char: " << (vecchar.empty() == true ? "vecchar is empty" : "vechar is not empt") << std::endl;
   vecchar.push_back('a');
   vecchar.push_back('b');
-  std::cout << "char: " << (vecchar.empty() == true ? "vecchar is empty" : "vechar is not empt" )<< std::endl;
+  std::cout << "char: " << (vecchar.empty() == true ? "vecchar is empty" : "vechar is not empt") << std::endl;
   printvec(vecchar);
   print_size(vecchar);
-  std::cout << std::endl; 
+  std::cout << std::endl;
 }
 /*
 ** test resize reserve
@@ -151,7 +154,7 @@ void vec_resize_test()
   printvec(vec);
   vec.reserve(5);
   print_size(vec);
-  std::cout << std::endl;  
+  std::cout << std::endl;
 }
 /*
 ** Element access test
@@ -161,7 +164,7 @@ void vec_element_test()
   printstr("---------Test Element acces(at , [], front. back-----------\n");
   printstr("[ vector info]");
   ft::vector<int> vec;
-  for(int i = 1; i <= 10; i++)
+  for (int i = 1; i <= 10; i++)
     vec.push_back(i);
   printvec(vec);
   std::cout << "at(0) is: " << vec.at(0) << std::endl;
@@ -181,18 +184,18 @@ void vec_assign_test()
   ft::vector<int> first;
   ft::vector<int> second;
   ft::vector<int> third;
-  first.assign (7,100);             // 7 ints with a value of 100
+  first.assign(7, 100); // 7 ints with a value of 100
   printvec(first);
   ft::vector<int>::iterator it;
-  it=first.begin() + 1;
-  second.assign (it, first.end() - 1); // the 5 central values of first
+  it = first.begin() + 1;
+  second.assign(it, first.end() - 1); // the 5 central values of first
   printvec(second);
-  int ints[] = {1776,7,4};
-  third.assign (ints,ints+3);   // assigning from array.
+  int ints[] = {1776, 7, 4};
+  third.assign(ints, ints + 3); // assigning from array.
   printvec(third);
-  std::cout << "Size of first: " << int (first.size()) << '\n';
-  std::cout << "Size of second: " << int (second.size()) << '\n';
-  std::cout << "Size of third: " << int (third.size()) << '\n';
+  std::cout << "Size of first: " << int(first.size()) << '\n';
+  std::cout << "Size of second: " << int(second.size()) << '\n';
+  std::cout << "Size of third: " << int(third.size()) << '\n';
   std::cout << std::endl;
 }
 /*
@@ -202,29 +205,29 @@ void vec_insert_test()
 {
   printstr("---------Test  insert-----------\n");
   printstr("[ vector info]");
-  ft::vector<int> vector (3,100); //100 100 100
+  ft::vector<int> vector(3, 100); // 100 100 100
   printvec(vector);
-  
+
   ft::vector<int>::iterator it;
   it = vector.begin();
-  it = vector.insert (it , 200 ); // 200 100 100 100
+  it = vector.insert(it, 200); // 200 100 100 100
   printvec(vector);
   // second insert
-  vector.insert (it,2,300); //300 300 200 100 100 100 
+  vector.insert(it, 2, 300); // 300 300 200 100 100 100
   printvec(vector);
   // third insert with another vector
-  it = vector.begin(); //it在第一位
-  ft::vector<int> anothervector (2,400);
-  vector.insert (it+2,anothervector.begin(),anothervector.end()); //300 300 400 400 200 100 100 100 第三位插入两个400
+  it = vector.begin(); // it在第一位
+  ft::vector<int> anothervector(2, 400);
+  vector.insert(it + 2, anothervector.begin(), anothervector.end()); // 300 300 400 400 200 100 100 100 第三位插入两个400
   printvec(vector);
   // fourth insert with a tab
-  int array [] = { 501,502,503 };
-  vector.insert (vector.begin(), array, array+3);  // 501 502 503 300 300 400 400 200 100 100 100begin位插入一个数组
+  int array[] = {501, 502, 503};
+  vector.insert(vector.begin(), array, array + 3); // 501 502 503 300 300 400 400 200 100 100 100begin位插入一个数组
   printvec(vector);
   std::cout << std::endl;
 }
 /*
-** test push_back pop_back 
+** test push_back pop_back
 */
 void vec_push_pop_test()
 {
@@ -246,13 +249,14 @@ void vec_erase_test()
   printstr("---------Test erase-----------\n");
   printstr("[ vector info]");
   ft::vector<int> vector;
-  for (int i=1; i<=10; i++) vector.push_back(i);
+  for (int i = 1; i <= 10; i++)
+    vector.push_back(i);
   printvec(vector);
   // erase the 6th element
-  vector.erase (vector.begin()+5);
+  vector.erase(vector.begin() + 5);
   printvec(vector);
   // erase the first 3 elements:
-  vector.erase (vector.begin(),vector.begin()+3);
+  vector.erase(vector.begin(), vector.begin() + 3);
   printvec(vector);
   std::cout << std::endl;
 }
@@ -263,8 +267,8 @@ void vec_swap_clear_test()
 {
   printstr("---------Test swap / clear-----------\n");
   printstr("[ vector info]");
-  ft::vector<int> foo (3,100);   // three ints with a value of 100
-  ft::vector<int> bar (5,200);   // five ints with a value of 200
+  ft::vector<int> foo(3, 100); // three ints with a value of 100
+  ft::vector<int> bar(5, 200); // five ints with a value of 200
   foo.swap(bar);
   std::cout << "foo contains:";
   printvec(foo);
@@ -281,27 +285,33 @@ void vec_overloads_test()
 {
   printstr("---------Test overloads-----------\n");
   printstr("[ vector info]");
-  ft::vector<int> foo (3,100);
+  ft::vector<int> foo(3, 100);
   std::cout << "foo vec is: ";
   printvec(foo);
-  ft::vector<int> bar (5,200);
+  ft::vector<int> bar(5, 200);
   std::cout << "bar vec is: ";
   printvec(bar);
   /* operator != */
-  if (foo != bar) std::cout << "foo and bar is not same" << std::endl;
-   /* operator < */
-  if (foo < bar) std::cout << "foo is smaller then bar" << std::endl;
+  if (foo != bar)
+    std::cout << "foo and bar is not same" << std::endl;
+  /* operator < */
+  if (foo < bar)
+    std::cout << "foo is smaller then bar" << std::endl;
   /* operator > */
-  if (foo > bar) std::cout << "foo is biger then bar" << std::endl;
+  if (foo > bar)
+    std::cout << "foo is biger then bar" << std::endl;
   /*operator == , <= ,>= */
   foo = bar;
   std::cout << "foo vec is: ";
   printvec(foo);
-  if (foo == bar) std::cout << "foo and bar is same" << std::endl;
-  if (foo >= bar) std::cout << "foo is biger or same then bar" << std::endl;
-  if (foo <= bar) std::cout << "foo is smaller or same then bar" << std::endl << std::endl;
+  if (foo == bar)
+    std::cout << "foo and bar is same" << std::endl;
+  if (foo >= bar)
+    std::cout << "foo is biger or same then bar" << std::endl;
+  if (foo <= bar)
+    std::cout << "foo is smaller or same then bar" << std::endl
+              << std::endl;
 }
-
 
 void _vector()
 {
@@ -337,7 +347,7 @@ void _vector()
   ft::map<char,int> third (second);
   printmap_val("map third val is: ", third);
   printmap_key("map third key is: ", third);
-  //test operator = 
+  //test operator =
   third['c'] = 0;
   first = third;
   printmap_val("map first val is: ", first);
@@ -374,22 +384,22 @@ void map_iterator_test(){
 }
 
 void map_size_test(){
-  
+
   printstr("---------Test size /empty-----------");
   printstr("[ map info]");
   ft::map<int,int> first;
   std::cout << (first.empty() == 1? "first is empty": "first is not empty") << std::endl;
   std::cout << "first size is: " << first.size() << std::endl;
-  
+
   first[1] = 2;
   std::cout << (first.empty() == 1? "first is empty": "first is not empty") << std::endl;
   std::cout << "first size is: " << first.size() << std::endl;
-  
-  
+
+
   ft::map<char,std::string> second;
   std::cout << (second.empty() == 1? "second is empty": "second is not empty") << std::endl;
   std::cout <<  "second size is: " << second.size() << std::endl;
- 
+
   second[1] = 2;
   std::cout << (second.empty() == 1? "second is empty": "second is not empty") << std::endl;
   std::cout <<  "second size is: " << second.size() << std::endl << std::endl;
@@ -440,7 +450,7 @@ void map_insert_test(){
 
 
 void map_erase_test(){
-  
+
   printstr("---------Test erase-----------");
   printstr("[ map info]");
   ft::map<char,int> first;
@@ -480,12 +490,12 @@ void map_swap_clear_test(){
   first.swap(second);
   printstr("---aftre swap: ");
   printmap("first is:", first);
-  printmap("second is:", second); 
+  printmap("second is:", second);
   printstr("---aftre clear: ");
   first.clear();
   printmap("first is:", first);
   second.clear();
-  printmap("second is:", second); 
+  printmap("second is:", second);
   std::cout << std::endl;
 }
 
@@ -581,7 +591,7 @@ void map_equal_test() {
   ret = first.equal_range(1); //ret = <lower_bound , upp_bound>
   std::cout << ret.first->first << " => " << ret.first->second << std::endl;
   std::cout << ret.second->first << " => " << ret.second->second << std::endl << std::endl;
-  
+
   ret = first.equal_range(2); //ret = <lower_bound , upp_bound>
   std::cout << ret.first->first << " => " << ret.first->second << std::endl;
   std::cout << ret.second->first << " => " << ret.second->second << std::endl << std::endl;
@@ -594,7 +604,7 @@ void _map()
   map_size_test();
   map_element_test();
   map_insert_test();
-  map_erase_test(); 
+  map_erase_test();
   map_swap_clear_test();
   map_keyComp_valComp_test();
   map_find_test();
@@ -604,10 +614,10 @@ void _map()
 }
 
 void stack_constructor_test(void){
-  
+
     printstr("---------Test constructor-----------\n");
     printstr("[ stack info]");
-    ft::vector<int> vec (2,200); 
+    ft::vector<int> vec (2,200);
     ft::stack<int, ft::vector<int> > stack (vec);
     std::cout << stack.size() << std::endl;
 
@@ -631,7 +641,7 @@ void stack_modifier_test() {
     std::cout << "int: " << (stack.empty() == true ? "stack is empty" : "stack is not empt" )<< std::endl;
     std::cout << "size is: " << stack.size() << std::endl;
     std::cout << "top element is: " << stack.top() << std::endl;
-    
+
     stack.push(2);
     std::cout << "size is: " << stack.size() << std::endl;
     std::cout << "top element is: " << stack.top() << std::endl;
@@ -651,7 +661,7 @@ void stack_operators_test()
     ft::stack<int, ft::vector<int> > stack2;
     std::cout << "stack2 size is: " << stack2.size() << std::endl;
     if (stack1 == stack2) std::cout << "stdack1 and stack2 is same" << std::endl;
-    
+
     ft::vector<int> vec (2,200);
     ft::stack<int, ft::vector<int> >stack3(vec);
     std::cout << "stack1 size is: " << stack1.size() << std::endl;
