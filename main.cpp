@@ -52,7 +52,7 @@ int main()
     }
     return 0;*/
     
-    Macro::map<int, int>   m1;
+    Macro::map<int, int>	m1;
     Macro::map<int, int>	m2;
     Macro::map<int, int>::iterator it;
 
