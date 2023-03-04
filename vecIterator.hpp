@@ -5,6 +5,7 @@
 #include <cstddef>
 
 #include "iterator.hpp"
+#include "utils.hpp"
 
 namespace ft
 {
@@ -47,9 +48,10 @@ namespace ft
         // Member functions
         iterator_type base() const { return (_element); }
 
-        reference operator*() const
+        reference &operator*() const
         {
-            return (*_element);
+            Iterator tmp = _element;
+            return (*tmp);
         }
 
         vectIterator operator+(difference_type n) const
