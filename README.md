@@ -1,4 +1,4 @@
-# FT_CONTAINERS
+# Ft_containers
 ## Recode part of the C++ STL with the C++98 standard
 ## 1. Containers
 ### *Sequence Container*:
