@@ -1,8 +1,11 @@
 # FT_CONTAINERS
-## Recode the STL containers with the C++98 standard
-### Vector
+## Recode part of the C++ STL with the C++98 standard
+## 1. Containers
+### *Sequence Container*:
+> implement data structures that can be accessed in a sequential way 
+- #### Vector
   - std::allocator
-  - the inner data structure
+  - the inner data structure -> dynamic array
   - the difference between vector and map iterator
   ```
       vector: random_access_iterator;
@@ -11,7 +14,9 @@
   
   - use of friend keyword
   - vectoriterator T and const T cast?
-### Map
+### *Associative Containers*:
+>  implement sorted data structures that can be quickly searched (O(log n) complexity)
+- #### Map
   - the inner data structure -> RBT or AVL...
   - pair and make_pair
   - map is ordered
@@ -20,12 +25,15 @@
   - use of friend keyword
   - insert or delete iterators
   
-### Set
+- #### Set (in bonus)
 
-### Stack
+### *Container Adaptors*:
+>  provide a different interface for sequential containers
+- #### Stack
   - use your own vector class as default underlying container
 
-### std::iterator_traits
+## 2. Iterators
+### *std::iterator_traits*
   - 5 main types of iterators
   ```
       input_iterator;
@@ -42,7 +50,7 @@
       pointer;
       reference;
   ```
-### std::reverse_iterator
+### *std::reverse_iterator*
 ### utils
 ```
     std::enable_if (implement it in a C++98 manner)
