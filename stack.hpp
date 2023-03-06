@@ -32,8 +32,6 @@ namespace ft
         friend bool operator<=(const stack &lhs, const stack &rhs);
         friend bool operator>(const stack &lhs, const stack &rhs);
         friend bool operator>=(const stack &lhs, const stack &rhs);
-
-    
     };
     template <class T, class Container>
     bool operator==(const stack<T, Container> &lhs, const stack<T, Container> &rhs)

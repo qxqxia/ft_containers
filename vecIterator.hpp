@@ -48,7 +48,7 @@ namespace ft
         // Member functions
         iterator_type base() const { return (_element); }
 
-        reference &operator*() const
+        reference operator*() const
         {
             Iterator tmp = _element;
             return (*tmp);

@@ -5,6 +5,8 @@
 #include <algorithm>
 #include <limits>
 #include <cstddef>
+#include <memory>
+#include <exception>
 #include "iterator.hpp"
 #include "vecIterator.hpp"
 #include "utils.hpp"
@@ -84,7 +86,7 @@ namespace ft
             _allocator.deallocate(_v, _end_of_storage);
         }
 
-        vector &operator=(vector const &rhs)
+        vector &operator=(const vector &rhs)
         {
             if (this == &rhs)
                 return (*this);
