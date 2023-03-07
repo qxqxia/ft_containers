@@ -390,7 +390,7 @@ namespace ft
         {
             if (*this == x)
             {
-                return;
+                return ;
             }
             ft::_swap(_size, x._size);
             ft::_swap(_end_of_storage, x._end_of_storage);
