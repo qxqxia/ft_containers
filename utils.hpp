@@ -71,7 +71,7 @@ namespace ft
     }
 
     template< class InputIt1, class InputIt2, class BinaryPredicate >
-    bool equal( InputIt1 first1, InputIt1 last1, InputIt2 first2, InputIt2 last2, BinaryPredicate p ){
+    bool equal( InputIt1 first1, InputIt1 last1, InputIt2 first2, BinaryPredicate bp ){
         for (; first1 != last1; ++first1, ++first2)
         {
             if (!bp(*first1, *first2))
