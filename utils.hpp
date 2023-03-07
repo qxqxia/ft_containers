@@ -146,7 +146,7 @@ namespace ft
     bool operator<(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs)
     {
         if (lhs.first == rhs.first)
-            return lh.second < rhs.second;
+            return lhs.second < rhs.second;
         return (lhs.first < rhs.first);
     }
 
@@ -160,7 +160,7 @@ namespace ft
     bool operator>(const pair<T1, T2> &lhs, const pair<T1, T2> &rhs)
     {
         if (lhs.first == rhs.first)
-            return lh.second > rhs.second;
+            return lhs.second > rhs.second;
         return (lhs.first > rhs.first);
     }
 
