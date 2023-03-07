@@ -1,7 +1,7 @@
 # Ft_containers
 ## Recode part of the C++ STL with the C++98 standard
 ## 1. Containers
-### *Sequence Container*:
+### *Sequence Containers*:
 > implement data structures that can be accessed in a sequential way 
 - #### Vector
   - std::allocator
