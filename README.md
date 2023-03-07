@@ -6,6 +6,7 @@
 - #### Vector
   - std::allocator
   - the inner data structure -> dynamic array
+  - capacity is automatically expanded by the container
   - the difference between vector and map iterator
   ```
       vector: random_access_iterator;
