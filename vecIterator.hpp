@@ -13,35 +13,33 @@ namespace ft
     // member functions
     template <typename Iterator>
     class vectIterator : public ft::iterator<random_access_iterator_tag, Iterator>
-    {
-    public:
-        typedef Iterator iterator_type;
-        typedef typename ft::iterator_traits<Iterator>::iterator_category iterator_category;
-        typedef typename ft::iterator_traits<Iterator>::value_type value_type;
-        typedef typename ft::iterator_traits<Iterator>::difference_type difference_type;
-        typedef typename ft::iterator_traits<Iterator>::pointer pointer;
-        typedef typename ft::iterator_traits<Iterator>::reference reference;
-
+    { 
     protected:
         Iterator _element;
+    public:
+        typedef Iterator iterator_type;
+        typedef typename ft::iterator_traits<Iterator>::iterator_category   iterator_category;
+        typedef typename ft::iterator_traits<Iterator>::value_type          value_type;
+        typedef typename ft::iterator_traits<Iterator>::difference_type     difference_type;
+        typedef typename ft::iterator_traits<Iterator>::pointer             pointer;
+        typedef typename ft::iterator_traits<Iterator>::reference           reference;
 
     public:
         /*constructeur and destructeur*/
         vectIterator() : _element() {}
+        
         explicit vectIterator(Iterator src) : _element(src) {}
+        
         vectIterator(const vectIterator &src) : _element(src._element) {}
         // virtual ~vectIterator(void){}
 
         template <typename Iter> // Allow it to const_it conversion
-        vectIterator(const vectIterator<Iter> &src) : _element(src.base())
-        {
-        }
+        vectIterator(const vectIterator<Iter> &src) : _element(src.base()){}
 
         vectIterator operator=(vectIterator const &rhs)
         {
-            if (this == &rhs)
-                return (*this);
-            _element = rhs._element;
+            if (this != &rhs)
+                _element = rhs._element;
             return (*this);
         }
 

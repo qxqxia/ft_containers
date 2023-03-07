@@ -64,7 +64,7 @@ namespace ft
     };
 
     // std::reverse_iterator
-    template <class Iterator>
+    template <typename Iterator>
     class reverse_iterator
     {
     public:
