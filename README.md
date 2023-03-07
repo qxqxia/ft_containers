@@ -50,8 +50,10 @@
       value_type;
       pointer;
       reference;
-  ```
-### *std::reverse_iterator*
+ ```
+
+### *Iterator Adaptors*:
+- ### reverse_iterator
 ### utils
 ```
     std::enable_if (implement it in a C++98 manner)
