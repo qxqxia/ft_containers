@@ -8,7 +8,6 @@
 #include <memory>
 #include <exception>
 #include "iterator.hpp"
-#include "vecIterator.hpp"
 #include "utils.hpp"
 
 namespace ft
@@ -21,24 +20,24 @@ namespace ft
         typedef T value_type;
         typedef Allocator allocator_type;
 
-        typedef typename allocator_type::reference reference;
-        typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::pointer pointer;
-        typedef typename allocator_type::const_pointer const_pointer;
-        typedef int difference_type;
-        typedef size_t size_type;
+        typedef typename allocator_type::reference          reference;
+        typedef typename allocator_type::const_reference    const_reference;
+        typedef typename allocator_type::pointer            pointer;
+        typedef typename allocator_type::const_pointer      const_pointer;
+        typedef ptrdiff_t                                   difference_type;
+        typedef size_t                                      size_type;
 
-        typedef typename ft::vectIterator<pointer> iterator;
-        typedef typename ft::vectIterator<const_pointer> const_iterator;
+        typedef pointer                                     iterator;
+        typedef const_pointer                               const_iterator;
 
         typedef typename ft::reverse_iterator<iterator> reverse_iterator;
         typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
     protected:
-        allocator_type _allocator;
-        size_type _end_of_storage;
-        size_type _size;
-        value_type *_v;
+        allocator_type  _allocator;
+        size_type       _end_of_storage;
+        size_type       _size;
+        value_type      *_v;
 
     public:
         // default
@@ -57,7 +56,6 @@ namespace ft
             }
         }
 
-        // 从迭代器构造vector
         // Check whether it's an integral type.  If so, it's not an iterator. SFINAE
         template <class InputIterator>
         vector(InputIterator first, InputIterator last, const allocator_type &allocator = allocator_type(),
@@ -72,7 +70,7 @@ namespace ft
         {
             _allocator = x._allocator;
             _size = x._size;
-            _end_of_storage = x._end_of_storage;
+            _end_of_storage = x._size;
             _v = _allocator.allocate(_end_of_storage);
             for (size_type i = 0; i < _size; i++)
             {
@@ -152,7 +150,11 @@ namespace ft
             {
                 throw(std::length_error("vector::size error"));
             }
-            if (n <= size())
+
+	        size_type	oldN = size();
+	        size_type	oldCap = capacity();
+
+            if (n < oldN)
             {
                 for (; _size > n; _size--)
                 {
@@ -161,11 +163,18 @@ namespace ft
             }
             else
             {
-                reserve(n);
-                for (; _size < n; _size++)
-                {
-                    _allocator.construct(_v + _size, val);
+                //reserve(n);
+                if (n <= oldCap){}
+                else{
+                    if (oldCap * 2 >= n)
+                        reserve(oldCap * 2);
+                    else
+                        reserve(n);
                 }
+            }
+            for (; _size < n; _size++)
+            {
+                _allocator.construct(_v + _size, val);
             }
         }
 
@@ -187,7 +196,7 @@ namespace ft
         {
             if (n > max_size())
             {
-                throw std::length_error("vector length error");
+                throw std::length_error("vector::reserve");
             }
             if (n > capacity())
             {
@@ -265,20 +274,20 @@ namespace ft
             }
         }
 
-        void push_back(const T &val)
+        void push_back(const value_type &val)
         {
-            //如果push_back之前capacity为0, 扩展后的capacity为1，否则新capacity是旧capacity的两倍
             if (_end_of_storage == 0)
             {
                 reserve(1);
             }
-            if (_size == _end_of_storage)
+
+            if (_size  == _end_of_storage)
             {
                 reserve(_size * 2);
             }
-            T *end = &_v[_size]; // why &
-            _size++;
+            T *end = &_v[_size];
             _allocator.construct(end, val);
+            _size++;
         }
 
         void pop_back()
@@ -295,7 +304,7 @@ namespace ft
             size_type diff = position - begin();
             if (_size + 1 > _end_of_storage)
             {
-                reserve(_size + 1);
+                reserve(_size * 2);
             }
             for (size_type i = _size; i > diff; i--)
             {
@@ -312,7 +321,7 @@ namespace ft
             size_type diff = position - begin();
             if (_size + n > _end_of_storage)
             {
-                reserve(_size + n);
+                reserve(_size + std::max(n, _size));
             }
             for (size_type i = _size; i > diff; i--)
             {
@@ -338,7 +347,7 @@ namespace ft
             difference_type diff = position - begin();
             if (_size + dist > _end_of_storage)
             {
-                reserve(_size + dist);
+                reserve(_size + std::max((size_t)dist, _size));
             }
             for (difference_type i = _size; i > diff; i--)
             {
@@ -366,10 +375,13 @@ namespace ft
             {
                 for (; it + 1 != ite; it++)
                 {
-                    _allocator.destroy(it.base());
-                    _allocator.construct(it.base(), *(it + 1));
+                    //_allocator.destroy(it.base());
+                    _allocator.destroy(it);
+                    //_allocator.construct(it.base(), *(it + 1));
+                    _allocator.construct(it, *(it + 1));
                 }
-                _allocator.destroy(it.base());
+                //_allocator.destroy(it.base());
+                _allocator.destroy(it);
                 _size--;
             }
             return ret;
@@ -418,16 +430,18 @@ namespace ft
     template <class T, class Allocator>
     bool operator==(const vector<T, Allocator> &lhs, const vector<T, Allocator> &rhs)
     {
+        typedef typename    vector<T, Allocator>::const_iterator    it_type;
         if (lhs.size() != rhs.size())
             return (false);
-        for (size_t i = 0; i < lhs.size(); i++)
+        /*for (size_t i = 0; i < lhs.size(); i++)
         {
             if (lhs[i] != rhs[i])
             {
                 return false;
             }
         }
-        return true;
+        return true;*/
+        return ft::equal<it_type, it_type>(lhs.begin(), lhs.end(), rhs.begin());
     }
 
     template <class T, class Allocator>
