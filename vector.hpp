@@ -61,20 +61,11 @@ namespace ft
         // Check whether it's an integral type.  If so, it's not an iterator. SFINAE
         template <class InputIterator>
         vector(InputIterator first, InputIterator last, const allocator_type &allocator = allocator_type(),
-               typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0) : _allocator(allocator)
+               typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0) : _allocator(allocator), _size(0),_end_of_storage(0)
         {
-            size_type n = static_cast<size_type>(std::distance(first, last));
-
-            _v = _allocator.allocate(n);
-            _size = _v;
-            _end_of_storage = _v + n;
-	        //std::copy(first, last, begin());
-            //assign(first, last);
-            while (first != last){
-                push_back(*first);
-                ++first;
-            }
-
+		_v = _allocator.allocate(0);
+		assign(first, last);
+		_end_of_storage = std::distance(first, last);
         }
 
         // copy constructor

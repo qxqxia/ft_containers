@@ -52,33 +52,68 @@ namespace ft{
             pointer operator->() const{return &(_node->data);}
 
             //Increment iterator position  ++key
-            /*tree_iterator &operator++(){
-                
+            tree_iterator &operator++(){ //inorder traversal
+                if (_node && _node->right){
+                    _node = _node->right;
+                    while(_node->left)
+                        _node = _node->left;
+                }
+                else if(_node && _node->parent){
+                    nodeptr tmp1 = _node;
+                    nodeptr tmp2 = _node->parent;
+                    while(tmp && _node == tmp->right){
+                        if (tmp->parent == NULL) //if tmp is root
+                        {
+                            _node = tmp1->parent;
+                            return *this;
+                        }
+                        _node = tmp;
+                        tmp = tmp->parent;
+                    }
+                    _node = tmp;
+                }
+                return *this;
             }
         
             //The post-increment version
             tree_iterator operator++(int){
                 tree_iterator tmp(*this);
-                this->operator++();
+                
+                operator++();
                 return tmp;
             }
 
-            //Decreases iterator position --key
-            tree_iterator& operator--(){
-            if (this->_node == _null){
-                this->_node = max();
-                return *this;
+            //The post-increment version
+            tree_iterator operator--(){
+                if (_node && _node->left){
+                    _node = _node->left;
+                    while(_node->right && _node->right != NULL)
+                        _node = _node->right;
                 }
-                this->_node = predecessor(this->_node);
+                else if(_node && _node->parent){
+                    nodeptr tmp1 = _node;
+                    nodeptr tmp2 = _node->parent;
+                    while(tmp && _node == tmp->left){
+                        if (tmp->parent == NULL) //if tmp is root
+                        {
+                            _node = tmp1;
+                            return *this;
+                        }
+                        _node = tmp;
+                        tmp = tmp->parent;
+                    }
+                    _node = tmp;
+                }
                 return *this;
             }
             
-            //The post-increment version
-            tree_iterator operator--(int){
-                tree_iterator  tmp(*this);
-                this->operator--();
+            //Decreases iterator position --key
+            tree_iterator& operator--(int){
+                tree_iterator tmp(*this);
+
+                operator--();
                 return tmp;
-            }*/
+            }
 
             friend bool operator== (const tree_iterator<T, N, Compare>& lhs, const tree_iterator<T, N, Compare>& rhs){ 
                 return lhs.base() == rhs.base();
