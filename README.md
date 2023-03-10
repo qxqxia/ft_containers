@@ -62,5 +62,3 @@
     std::pair
     std::make_pair
 ```
-
-
