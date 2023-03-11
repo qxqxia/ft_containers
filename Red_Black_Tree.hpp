@@ -32,7 +32,7 @@ namespace ft
             TreeNode *left;
             TreeNode *right;
 
-            TreeNode(const value_type &v = value_type()) : data(v), left(NULL), right(NULL), parent(NULL) {}
+            TreeNode(const value_type &v = value_type()) : data(v), left(0), right(0), parent(0) {}
         };
 
         typedef K key_type;
@@ -55,13 +55,35 @@ namespace ft
         typedef typename ft::tree_iterator<value_type, treenode_pointer, compare_type> iterator;
         typedef typename ft::tree_iterator<const value_type, treenode_pointer, compare_type> const_iterator;
 
-        red_black_tree(const compare_type& comp = compare_type(), const treenode_allocator& )
+        red_black_tree(const compare_type& comp = compare_type(), const treenode_allocator& treenode_alloc = treenode_allocator())
         {
-            _treenode_alloc 
+		_treenode_alloc = treenode_alloc;
+		_end = new_node();
+		_root = _end;
+		_size = 0;
+		_comp = comp;
+	
         }
 
         /* destructor */
-        ~red_black_tree() {}
+        ~red_black_tree() {
+		if(_size){ clear();}
+		destroy_node(_root);
+	}
+
+	treenode_pointer	new_node(const_reference val = value_type())
+	{
+		treenode_pointer node = _treenode_alloc.allocate(1);
+
+		_treenode_alloc.construct(node, TreeNode(val));
+		node->color = RED;
+		node->left = NULL;
+		node->right = NULL;
+		node->parent = NULL;
+		return node;
+	}
+
+	
 
         /* size of node(tree) */
         size_type size() const
@@ -74,25 +96,42 @@ namespace ft
             return _treenode_alloc.max_size();
         }
 
+	bool empty()const {return _size == 0;}
+
+	iterator	begin(){return iterator(minVal());}
+
+	const_iterator	begin()const{return const_iterator(minVal());}
+
+	iterator	end(){return iterator(_end);}
+
+	const_iterator	end(){return const_iterator(_end);}
+
+	compare_type	comp()const{return _comp;}
+
+	/*iterator	find(const_reference val)
+	{
+		treenode_pointer 
+	}*/
+
         /*min val in tree*/
-        treenode_pointer minVal(treenode_pointer _root) const
+       /* treenode_pointer minVal(treenode_pointer _root) const
         {
             if (!_root)
                 return;
             while (_root->left != NULL)
                 _root = _root->left;
             return _root;
-        }
+        }*/
 
         /* max val in tree*/
-        treenode_pointer maxVal(treenode_pointer _root) const
+       /* treenode_pointer maxVal(treenode_pointer _root) const
         {
             if (!_root)
                 return;
             while (_root->right != NULL)
                 _root = root->right;
             return _root;
-        }
+        }*/
 
         // delete one node
         bool delete_node(value_type const &val)
