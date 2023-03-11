@@ -9,6 +9,7 @@
 #include <exception>
 #include "iterator.hpp"
 #include "utils.hpp"
+#include <iterator>
 
 namespace ft
 {
@@ -56,13 +57,15 @@ namespace ft
             }
         }
 
+        // 从迭代器构造vector
         // Check whether it's an integral type.  If so, it's not an iterator. SFINAE
         template <class InputIterator>
         vector(InputIterator first, InputIterator last, const allocator_type &allocator = allocator_type(),
-               typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0) : _allocator(allocator), _end_of_storage(0), _size(0)
+               typename ft::enable_if<!ft::is_integral<InputIterator>::value, InputIterator>::type * = 0) : _allocator(allocator), _size(0),_end_of_storage(0)
         {
-            _v = _allocator.allocate(0);
-            assign(first, last);
+		_v = _allocator.allocate(0);
+		assign(first, last);
+		_end_of_storage = std::distance(first, last);
         }
 
         // copy constructor
@@ -276,16 +279,19 @@ namespace ft
 
         void push_back(const value_type &val)
         {
+            //如果push_back之前capacity为0, 扩展后的capacity为1，否则新capacity是旧capacity的两倍
             if (_end_of_storage == 0)
             {
                 reserve(1);
             }
 
+            // if (_size == _end_of_storage)
             if (_size  == _end_of_storage)
             {
                 reserve(_size * 2);
             }
             T *end = &_v[_size];
+            //_size++;
             _allocator.construct(end, val);
             _size++;
         }

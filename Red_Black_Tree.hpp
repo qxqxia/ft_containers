@@ -5,7 +5,6 @@
 #include "utils.hpp"
 #include <memory>
 #include "iterator.hpp"
-#include <map>
 
 enum e_color
 {
@@ -56,8 +55,9 @@ namespace ft
         typedef typename ft::tree_iterator<value_type, treenode_pointer, compare_type> iterator;
         typedef typename ft::tree_iterator<const value_type, treenode_pointer, compare_type> const_iterator;
 
-        red_black_tree()
+        red_black_tree(const compare_type& comp = compare_type(), const treenode_allocator& )
         {
+            _treenode_alloc 
         }
 
         /* destructor */
