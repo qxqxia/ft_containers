@@ -55,35 +55,36 @@ namespace ft
         typedef typename ft::tree_iterator<value_type, treenode_pointer, compare_type> iterator;
         typedef typename ft::tree_iterator<const value_type, treenode_pointer, compare_type> const_iterator;
 
-        red_black_tree(const compare_type& comp = compare_type(), const treenode_allocator& treenode_alloc = treenode_allocator())
+        red_black_tree(const compare_type &comp = compare_type(), const treenode_allocator &treenode_alloc = treenode_allocator())
         {
-		_treenode_alloc = treenode_alloc;
-		_end = new_node();
-		_root = _end;
-		_size = 0;
-		_comp = comp;
-	
+            _treenode_alloc = treenode_alloc;
+            _end = new_node();
+            _root = _end;
+            _size = 0;
+            _comp = comp;
         }
 
         /* destructor */
-        ~red_black_tree() {
-		if(_size){ clear();}
-		destroy_node(_root);
-	}
+        ~red_black_tree()
+        {
+            if (_size)
+            {
+                clear();
+            }
+            destroy_node(_root);
+        }
 
-	treenode_pointer	new_node(const_reference val = value_type())
-	{
-		treenode_pointer node = _treenode_alloc.allocate(1);
+        treenode_pointer new_node(const_reference val = value_type())
+        {
+            treenode_pointer node = _treenode_alloc.allocate(1);
 
-		_treenode_alloc.construct(node, TreeNode(val));
-		node->color = RED;
-		node->left = NULL;
-		node->right = NULL;
-		node->parent = NULL;
-		return node;
-	}
-
-	
+            _treenode_alloc.construct(node, TreeNode(val));
+            node->color = RED;
+            node->left = NULL;
+            node->right = NULL;
+            node->parent = NULL;
+            return node;
+        }
 
         /* size of node(tree) */
         size_type size() const
@@ -96,42 +97,46 @@ namespace ft
             return _treenode_alloc.max_size();
         }
 
-	bool empty()const {return _size == 0;}
+        bool empty() const { return _size == 0; }
 
-	iterator	begin(){return iterator(minVal());}
+        iterator begin() { return iterator(minVal()); }
 
-	const_iterator	begin()const{return const_iterator(minVal());}
+        const_iterator begin() const { return const_iterator(minVal()); }
 
-	iterator	end(){return iterator(_end);}
+        iterator end() { return iterator(_end); }
 
-	const_iterator	end(){return const_iterator(_end);}
+        const_iterator end() { return const_iterator(_end); }
 
-	compare_type	comp()const{return _comp;}
+        compare_type comp() const { return _comp; }
 
-	/*iterator	find(const_reference val)
-	{
-		treenode_pointer 
-	}*/
+        iterator find(const_reference val)
+        {
+            treenode_pointer ret = _bst_find(val);
+
+            if (!ret)
+                return end();
+            return iterator(ret);
+        }
 
         /*min val in tree*/
-       /* treenode_pointer minVal(treenode_pointer _root) const
-        {
-            if (!_root)
-                return;
-            while (_root->left != NULL)
-                _root = _root->left;
-            return _root;
-        }*/
+        /* treenode_pointer minVal(treenode_pointer _root) const
+         {
+             if (!_root)
+                 return;
+             while (_root->left != NULL)
+                 _root = _root->left;
+             return _root;
+         }*/
 
         /* max val in tree*/
-       /* treenode_pointer maxVal(treenode_pointer _root) const
-        {
-            if (!_root)
-                return;
-            while (_root->right != NULL)
-                _root = root->right;
-            return _root;
-        }*/
+        /* treenode_pointer maxVal(treenode_pointer _root) const
+         {
+             if (!_root)
+                 return;
+             while (_root->right != NULL)
+                 _root = root->right;
+             return _root;
+         }*/
 
         // delete one node
         bool delete_node(value_type const &val)
@@ -158,18 +163,54 @@ namespace ft
 
         iterator lower_bound(const_reference val)
         {
+            iterator it = begin();
+            iterator ite = end();
+
+            for (; it != ite; it++)
+            {
+                if (!(_comp(it->first, val.first))) // why
+                    return (it);
+            }
+            return (it);
         }
 
-        iterator lower_bound(const_reference val) const
+        const_iterator lower_bound(const_reference val) const
         {
+            const_iterator it = begin();
+            const_iterator ite = end();
+
+            for (; it != ite; it++)
+            {
+                if (!(_comp(it->first, val.first)))
+                    return (it);
+            }
+            return (it);
         }
 
         iterator upper_bound(const_reference val)
         {
+            iterator it = begin();
+            iterator ite = end();
+
+            for (; it != ite; it++)
+            {
+                if (!(_comp(val.first, it->first))) // why
+                    return (it);
+            }
+            return (it);
         }
 
-        iterator upper_bound(const_reference val) const
+        const_iterator upper_bound(const_reference val) const
         {
+            const_iterator it = begin();
+            const_iterator ite = end();
+
+            for (; it != ite; it++)
+            {
+                if (!(_comp(val.first, it->first))) // why
+                    return (it);
+            }
+            return (it);
         }
 
         // delete tree
