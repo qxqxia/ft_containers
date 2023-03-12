@@ -15,7 +15,6 @@
   ```
   
   - use of friend keyword
-  - vectoriterator T and const T cast?
 ### *Associative Containers*:
 >  implement sorted data structures that can be quickly searched (O(log n) complexity)
 - #### Map
