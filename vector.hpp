@@ -161,7 +161,7 @@ namespace ft
                 insert(end(), n - size(), val);
             }
             else if (n < size()){
-                erase(begin() + n,end());
+                erase(begin() + n, end());
             }
         }
 
@@ -312,7 +312,8 @@ namespace ft
                 size_type   diff;
 
                 diff = position - begin();
-                reserve(get_next_size(_size + n));
+                size_type size_rev = std::max(_size * 2, _size + n); 
+                reserve(size_rev);
                 position = begin() + diff;
             }
             for (size_type i = 0; i < n; i++){
