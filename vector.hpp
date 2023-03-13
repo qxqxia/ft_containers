@@ -40,6 +40,17 @@ namespace ft
         size_type       _size;
         value_type      *_v;
 
+        size_type get_next_size(size_type n){
+            size_type   res;
+
+            res = n > max_size() / 2 ? max_size() : _end_of_storage * 2;
+            if (!res)
+                res = 1;
+            if (res < n)
+                return (n);
+            return (res);
+        }
+
     public:
         // default
         explicit vector(const allocator_type &allocator = allocator_type()) : _allocator(allocator), _end_of_storage(0), _size(0)
@@ -149,35 +160,12 @@ namespace ft
 
         void resize(size_type n, value_type val = value_type())
         {
-            if (n > max_size())
-            {
-                throw(std::length_error("vector::size error"));
+            if (n > size()){
+                reserve(get_next_size(n));
+                insert(end(), n - size(), val);
             }
-
-	        size_type	oldN = size();
-	        size_type	oldCap = capacity();
-
-            if (n < oldN)
-            {
-                for (; _size > n; _size--)
-                {
-                    _allocator.destroy(&_v[_size - 1]);
-                }
-            }
-            else
-            {
-                //reserve(n);
-                if (n <= oldCap){}
-                else{
-                    if (oldCap * 2 >= n)
-                        reserve(oldCap * 2);
-                    else
-                        reserve(n);
-                }
-            }
-            for (; _size < n; _size++)
-            {
-                _allocator.construct(_v + _size, val);
+            else if (n < size()){
+                erase(begin() + n,end());
             }
         }
 
@@ -324,21 +312,16 @@ namespace ft
         // insert-fill
         void insert(iterator position, size_type n, const value_type &val)
         {
-            size_type diff = position - begin();
-            if (_size + n > _end_of_storage)
-            {
-                reserve(_size + std::max(n, _size));
+            if (_end_of_storage < _size + n){
+                size_type   diff;
+
+                diff = position - begin();
+                reserve(get_next_size(_size + n));
+                position = begin() + diff;
             }
-            for (size_type i = _size; i > diff; i--)
-            {
-                _allocator.construct(&_v[i + n - 1], _v[i - 1]);
-                _allocator.destroy(&_v[i - 1]);
+            for (size_type i = 0; i < n; i++){
+                position = insert(position, val) + 1;
             }
-            for (size_type i = 0; i < n; i++)
-            {
-                _allocator.construct(&_v[diff + i], val);
-            }
-            _size += n;
         }
         // insert-range
         template <class InputIterator>
