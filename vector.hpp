@@ -312,10 +312,8 @@ namespace ft
                 size_type   diff;
 
                 diff = position - begin();
-                if (_size + n > _end_of_storage){
-                    size_type size_rev = std::max(_size * 2, _size + n); 
-                    reserve(size_rev);
-                }
+                size_type size_rev = std::max(_size * 2, _size + n); 
+                reserve(size_rev);
                 position = begin() + diff;
             }
             for (size_type i = 0; i < n; i++){
