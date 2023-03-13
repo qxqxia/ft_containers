@@ -6,17 +6,17 @@
 #    By: qxia <qxia@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/06 11:38:22 by qxia              #+#    #+#              #
-#    Updated: 2023/02/28 12:57:45 by qxia             ###   ########.fr        #
+#    Updated: 2023/03/13 11:39:04 by qxia             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CC = clang++
+CC = c++
 
 CFLAGS = -Wall -Wextra -Werror -std=c++98
 
 NAME = ft_containers
 
-SRCS = 
+SRCS = main.cpp
 
 OBJS = $(SRCS:%.cpp=%.o)
 
