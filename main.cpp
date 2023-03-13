@@ -1,6 +1,7 @@
 #include <iostream>
 #include "vector.hpp"
-#include <memory>
+#include "map.hpp"
+#include "stack.hpp"
 
 int main()
 {

@@ -2,7 +2,6 @@
 #define UTILS_HPP
 
 #include <iostream>
-#include <cstddef>
 
 namespace ft
 {

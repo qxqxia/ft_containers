@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "utils.hpp"
-#include <memory>
 #include "iterator.hpp"
 
 enum e_color
@@ -14,7 +13,6 @@ enum e_color
 
 namespace ft
 {
-
     template <typename T, // T is a pair
               typename K, // K is key_type
               class Compare,
