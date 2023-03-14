@@ -2,8 +2,8 @@
 # define __RED_BLACK_TREE_TPP__
 
 # include "iostream"
-# include "tree_iterator.hpp"
 # include "utils.hpp"
+# include "tree_iterator.hpp"
 
 
 // template<typename T, typename Key, class Compare, class Allocator> // T is a pair, Key is Key

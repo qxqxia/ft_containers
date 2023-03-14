@@ -91,16 +91,16 @@ namespace ft{
                 else if(_node && _node->parent){
                     nodeptr tmp1 = _node;
                     nodeptr tmp2 = _node->parent;
-                    while(tmp && _node == tmp->left){
-                        if (tmp->parent == NULL) //if tmp is root
+                    while(tmp2 && _node == tmp2->left){
+                        if (tmp2->parent == NULL) //if tmp is root
                         {
                             _node = tmp1;
                             return *this;
                         }
-                        _node = tmp;
-                        tmp = tmp->parent;
+                        _node = tmp2;
+                        tmp2 = tmp2->parent;
                     }
-                    _node = tmp;
+                    _node = tmp2;
                 }
                 return *this;
             }

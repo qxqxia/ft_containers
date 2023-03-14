@@ -2,12 +2,12 @@
 #define MAP_HPP
 
 #include <iostream>
-#include "tree_Iterator.hpp"
-#include "Red_Black_Tree.hpp"
+#include "tree_iterator.hpp"
+#include "red_black_tree.hpp"
 
 namespace ft
 {
-    template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T>>>
+    template <class Key, class T, class Compare = std::less<Key>, class Alloc = std::allocator<ft::pair<const Key, T> > >
     class map
     {
 
@@ -25,7 +25,7 @@ namespace ft
         typedef ptrdiff_t difference_type;
         typedef size_t size_type;
 
-        typedef typename ft::red_black_tree<value_type, key_type, key_compare, allocator_typr> tree_type;
+        typedef typename ft::red_black_tree<value_type, key_type, key_compare, allocator_type> tree_type;
         typedef typename tree_type::iterator iterator;
         typedef typename tree_type::const_iterator const_iterator;
 
@@ -39,7 +39,7 @@ namespace ft
 
         protected:
             key_compare comp; // less<Key>
-            value_compare(key_comp c) : comp(c) {}
+            value_compare(key_compare c) : comp(c) {}
 
         public:
             bool operator()(const value_type &lhs, const value_type &rhs) const
@@ -54,8 +54,8 @@ namespace ft
     public:
         explicit map(const key_compare &comp = key_compare(), const allocator_type &alloc = allocator_type())
         {
-            static_cast<void> comp; // why static_cast
-            static_cast<void> alloc;
+            static_cast<void>(comp); 
+            static_cast<void>(alloc);
         }
 
         template <class InputIt>
@@ -179,15 +179,18 @@ namespace ft
 
         size_type erase(const key_type &k)
         {
+            return _rbttree.node_erase(ft::make_pair(k, mapped_type()));
         }
 
         void erase(iterator first, iterator last)
         {
+            _rbttree.range_erase(first, last);
         }
 
         // swap
         void swap(map &x)
         {
+            _rbttree.swap_tree(x._rbttree);
         }
         // clear
         void clear()
@@ -264,8 +267,8 @@ namespace ft
     template <class Key, class T, class Compare, class Alloc>
     bool operator==(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
     {
-        typename map<Key, T, key_compare, Alloc>::const_iterator    it;
-        typename map<Key, T, key_compare, Alloc>::const_iterator    it2;
+        typename map<Key, T, Compare, Alloc>::const_iterator    it;
+        typename map<Key, T, Compare, Alloc>::const_iterator    it2;
 
         if (lhs.size() != rhs.size()){
             return (false);
