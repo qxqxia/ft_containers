@@ -5,7 +5,7 @@
 
 int main()
 {
-    ft::vector<int> v1;
+    /*ft::vector<int> v1;
 
     for(int i = 1; i < 10; i++){
         v1.push_back(i);
@@ -47,5 +47,18 @@ int main()
             std::cout << "capacity changed: " << sz << '\n';
         }
     }
-    return 0;
+    return 0;*/
+    ft::map<int, int>   m1;
+    ft::map<int, int>::iterator it;
+
+    m1[1] = 42;
+    m1[3] = 24;
+    m1[8] = 245;
+    it = m1.begin();
+    while(it != it.end()){
+        std::cout << it.first << '\n';
+        it++; 
+    }
+
+
 }

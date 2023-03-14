@@ -3,7 +3,6 @@
 # define __RED_BLACK_TREE_HPP__
 
 # include "iostream"
-
 # include "tree_iterator.hpp"
 # include "utils.hpp"
 
