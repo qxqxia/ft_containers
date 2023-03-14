@@ -258,21 +258,30 @@ namespace ft
 
         allocator_type get_allocator() const { return allocator_type(); }
 
-    private:
-        ft::AVL_tree<value_type> _avltree;
     };
 
     /*relational operators*/
     template <class Key, class T, class Compare, class Alloc>
     bool operator==(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
     {
-    }
+        typename map<Key, T, key_compare, Alloc>::const_iterator    it;
+        typename map<Key, T, key_compare, Alloc>::const_iterator    it2;
 
-    template <class Key, class T, class Compare, class Alloc>
-    bool operator!=(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
-    {
+        if (lhs.size() != rhs.size()){
+            return (false);
+        }
+        lhs = lhs.begin();
+        rhs = rhs.begin();
+        while (it != lhs.end()){
+            if (*it != *it2){
+                return (false);
+            }
+            it++;
+            it2++;
+        }
+        return (true);
     }
-
+   
     template <class Key, class T, class Compare, class Alloc>
     bool operator<(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
     {
@@ -288,7 +297,7 @@ namespace ft
     template <class Key, class T, class Compare, class Alloc>
     bool operator>(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)
     {
-        return rhs < lhs;
+        return (rhs < lhs);
     }
 
     template <class Key, class T, class Compare, class Alloc>
