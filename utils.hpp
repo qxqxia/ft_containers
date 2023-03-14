@@ -104,18 +104,20 @@ namespace ft
     class pair
     {  
         public:
+        typedef T1	first_type;
+		typedef T2	second_type;
             T1 first;
             T2 second;
 
         public:
             // default
-            pair() : first(), second() {}
+            pair() : first(T1()), second(T2()) {}
             ~pair() {}
 
             pair(const T1 &a, const T2 &b) : first(a), second(b) {}
             // copy constructor
             template <class A, class B>
-            pair(const pair<A, B> &p) : first(p, first), second(p.second) {}
+            pair(const pair<A, B> &p) : first(p.first), second(p.second) {}
             // Member functions
             // copy assignment operator
             pair &operator=(pair const &rhs)
