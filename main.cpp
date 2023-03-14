@@ -1,8 +1,7 @@
 #include <iostream>
 #include "vector.hpp"
-//#include "map.hpp"
+#include "map.hpp"
 #include "stack.hpp"
-#include "red_black_tree.hpp"
 
 int main()
 {
@@ -16,7 +15,7 @@ int main()
     v1.resize(12);
 
     std::cout << "v1 contains: ";
-    for(int i = 0; i < v1.size(); i++){
+    for(size_t i = 0; (size_t)i < v1.size(); i++){
         std::cout << ' ' << v1[i];
     }
     std::cout << '\n';
