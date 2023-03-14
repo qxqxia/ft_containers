@@ -1,7 +1,11 @@
 #include <iostream>
 #include "vector.hpp"
 #include "map.hpp"
+#include "map"
 #include "stack.hpp"
+
+#define Macro ft
+//#define Macro std
 
 int main()
 {
@@ -48,17 +52,43 @@ int main()
         }
     }
     return 0;*/
-    ft::map<int, int>   m1;
-    ft::map<int, int>::iterator it;
+    
+    Macro::map<int, int>   m1;
+    Macro::map<int, int>	m2;
+    Macro::map<int, int>::iterator it;
 
     m1[1] = 42;
     m1[3] = 24;
     m1[8] = 245;
+
+    m2[2] = 143;
+    m2[4] = 124;
+    m2[9] = 1245;
+
     it = m1.begin();
-    while(it != it.end()){
-        std::cout << it.first << '\n';
+    while(it != m1.end()){
+        std::cout << it->first << " - " << it->second << '\n';
+        it++; 
+    }
+    std::cout << "\n";
+    it = m2.begin();
+    while(it != m2.end()){
+        std::cout << it->first << " - " << it->second << '\n';
         it++; 
     }
 
-
+    m1.swap(m2);
+     std::cout << "\n";
+	
+    it = m1.begin();
+    while(it != m1.end()){
+        std::cout << it->first << " - " << it->second << '\n';
+        it++; 
+    }
+    std::cout << "\n";
+    it = m2.begin();
+    while(it != m2.end()){
+        std::cout << it->first << " - " << it->second << '\n';
+        it++; 
+    }
 }
