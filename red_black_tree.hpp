@@ -3,7 +3,7 @@
 # define __RED_BLACK_TREE_HPP__
 
 # include "iostream"
-# include "tree_iterator.hpp"
+# include "tree_Iterator.hpp"
 # include "utils.hpp"
 
 enum	e_tree_node_color
@@ -51,11 +51,11 @@ namespace ft
 	public:
 
 		typedef typename
-		ft::red_black_tree_iterator<T, Node*, Compare>
+		ft::tree_iterator<T, Node*, Compare>
 			iterator;
 
 		typedef typename
-		ft::red_black_tree_iterator<const T, Node*, Compare>
+		ft::tree_iterator<const T, Node*, Compare>
 			const_iterator;
 
 

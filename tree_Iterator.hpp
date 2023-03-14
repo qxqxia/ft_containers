@@ -14,7 +14,7 @@ namespace ft{
         
             typedef typename ft::iterator_traits<N>::iterator_category iterator_category;
             typedef typename ft::iterator_traits<N>::difference_type   difference_type;
-            typedef typename ft::iterator_traits<N>::reference         reference;
+            typedef typename ft::iterator_traits<N>::value_type         value_type;
 
         protected:
             nodeptr _node;
@@ -59,16 +59,16 @@ namespace ft{
                 else if(_node && _node->parent){
                     nodeptr tmp1 = _node;
                     nodeptr tmp2 = _node->parent;
-                    while(tmp && _node == tmp->right){
-                        if (tmp->parent == NULL) //if tmp is root
+                    while(tmp2 && _node == tmp2->right){
+                        if (tmp2->parent == NULL) //if tmp is root
                         {
                             _node = tmp1->parent;
                             return *this;
                         }
-                        _node = tmp;
-                        tmp = tmp->parent;
+                        _node = tmp2;
+                        tmp2 = tmp2->parent;
                     }
-                    _node = tmp;
+                    _node = tmp2;
                 }
                 return *this;
             }
