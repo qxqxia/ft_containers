@@ -12,20 +12,16 @@ namespace ft
     {
 
     public:
-        typedef Key key_type;
-        typedef T mapped_type;
+        typedef ft::pair<const Key, T> value_type;
         typedef Compare key_compare;
-        typedef Alloc allocator_type;
-        typedef ft::pair<const key_type, mapped_type> value_type;
-
-        typedef typename allocator_type::reference reference;
-        typedef typename allocator_type::const_reference const_reference;
-        typedef typename allocator_type::pointer pointer;
-        typedef typename allocator_type::const_pointer const_pointer;
+        typedef Alloc   allocator_type;
         typedef ptrdiff_t difference_type;
         typedef size_t size_type;
 
-        typedef typename ft::red_black_tree<value_type, key_type, key_compare, allocator_type> tree_type;
+        typedef typename allocator_type::reference reference;
+        typedef typename allocator_type::const_reference const_reference;
+
+        typedef typename ft::red_black_tree<value_type, Key, key_compare, Alloc> tree_type;
         typedef typename tree_type::iterator iterator;
         typedef typename tree_type::const_iterator const_iterator;
 
@@ -146,9 +142,9 @@ namespace ft
         }
 
         // element access
-        mapped_type &operator[](const key_type &k)
+        T &operator[](const Key &k)
         {
-            return ((insert(ft::make_pair(k, mapped_type()))).first)->second;
+            return ((insert(ft::make_pair(k, T()))).first)->second;
         }
 
         // modifiers
@@ -177,9 +173,9 @@ namespace ft
             erase(position->first);
         }
 
-        size_type erase(const key_type &k)
+        size_type erase(const Key &k)
         {
-            return _rbttree.node_erase(ft::make_pair(k, mapped_type()));
+            return _rbttree.node_erase(ft::make_pair(k, T()));
         }
 
         void erase(iterator first, iterator last)
@@ -201,45 +197,45 @@ namespace ft
 
         // lookup
         // count
-        size_type count(const key_type &k) const
+        size_type count(const Key &k) const
         {
-            return _rbttree.count(ft::make_pair(k, mapped_type()));
+            return _rbttree.count(ft::make_pair(k, T()));
         }
         // find
-        iterator find(const key_type &k)
+        iterator find(const Key &k)
         {
-            return _rbttree.find(ft::make_pair(k, mapped_type()));
+            return _rbttree.find(ft::make_pair(k, T()));
         }
 
-        const_iterator find(const key_type &k) const
+        const_iterator find(const Key &k) const
         {
-            return _rbttree.find(ft::make_pair(k, mapped_type()));
+            return _rbttree.find(ft::make_pair(k, T()));
         }
 
         // lower_bound
-        iterator lower_bound(const key_type &k)
+        iterator lower_bound(const Key &k)
         {
-            return _rbttree.lower_bound(ft::make_pair(k, mapped_type()));
+            return _rbttree.lower_bound(ft::make_pair(k, T()));
         }
 
-        const_iterator lower_bound(const key_type &k) const
+        const_iterator lower_bound(const Key &k) const
         {
-            return _rbttree.lower_bound(ft::make_pair(k, mapped_type()));
+            return _rbttree.lower_bound(ft::make_pair(k, T()));
         }
 
         // upper_bound
-        iterator upper_bound(const key_type &k)
+        iterator upper_bound(const Key &k)
         {
-            return _rbttree.upper_bound(ft::make_pair(k, mapped_type()));
+            return _rbttree.upper_bound(ft::make_pair(k, T()));
         }
 
-        const_iterator upper_bound(const key_type &k) const
+        const_iterator upper_bound(const Key &k) const
         {
-            return _rbttree.upper_bound(ft::make_pair(k, mapped_type()));
+            return _rbttree.upper_bound(ft::make_pair(k, T()));
         }
 
         // equal_range
-        pair<iterator, iterator> equal_range(const key_type &k)
+        pair<iterator, iterator> equal_range(const Key &k)
         {
             return ft::make_pair(lower_bound(k), upper_bound(k));
         }

@@ -2,9 +2,8 @@
 # define __RED_BLACK_TREE_TPP__
 
 # include "iostream"
-# include "utils.hpp"
 # include "tree_iterator.hpp"
-
+# include "utils.hpp"
 
 // template<typename T, typename Key, class Compare, class Allocator> // T is a pair, Key is Key
 
@@ -17,9 +16,9 @@ _binary_search_tree_find(const T & to_find) const
 
 	while (tmp != NULL && tmp != m_end)
 	{
-		if (m_compare_type(tmp->data.first, to_find.first))
+		if (m_compare(tmp->data.first, to_find.first))
 			tmp = tmp->right;
-		else if (m_compare_type(to_find.first, tmp->data.first))
+		else if (m_compare(to_find.first, tmp->data.first))
 			tmp = tmp->left;
 		else
 			return tmp;
