@@ -29,7 +29,7 @@ namespace ft
         typedef typename ft::reverse_iterator<const_iterator> const_reverse_iterator;
 
         // value_compare
-        class value_compare : public std::binary_function<value_type, value_type, bool>
+        class value_compare : std::binary_function<value_type, value_type, bool>
         {
             friend class map;
 
@@ -74,7 +74,7 @@ namespace ft
         {
         }
 
-        map &operator=(const map &other)
+        map & operator=(const map & other)
         {
             if (*this != other)
             {
@@ -252,7 +252,7 @@ namespace ft
 
         value_compare value_comp() const
         {
-            return value_compare(_rbttree.comp());
+            return value_compare(_rbttree.compare());
         }
 
         allocator_type get_allocator() const { return allocator_type(); }
@@ -269,8 +269,8 @@ namespace ft
         if (lhs.size() != rhs.size()){
             return (false);
         }
-        lhs = lhs.begin();
-        rhs = rhs.begin();
+        it = lhs.begin();
+        it2 = rhs.begin();
         while (it != lhs.end()){
             if (*it != *it2){
                 return (false);
@@ -280,6 +280,12 @@ namespace ft
         }
         return (true);
     }
+
+    template<class Key, class T, class Compare, class Alloc>
+	bool operator != (const map<Key, T, Compare, Alloc> & lhs, const map<Key, T, Compare, Alloc> & rhs)
+	{
+		return (!(lhs == rhs));
+	}
    
     template <class Key, class T, class Compare, class Alloc>
     bool operator<(const map<Key, T, Compare, Alloc> &lhs, const map<Key, T, Compare, Alloc> &rhs)

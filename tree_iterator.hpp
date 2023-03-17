@@ -106,7 +106,7 @@ namespace ft{
             }
             
             //Decreases iterator position --key
-            tree_iterator& operator--(int){
+            tree_iterator operator--(int){
                 tree_iterator tmp(*this);
 
                 operator--();
