@@ -157,17 +157,38 @@ namespace ft
     };
     // Non-member function overloads
     // relational operators
-    template <class Iterator>
-    bool operator==(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
-    {
-        return (lhs.base() == rhs.base());
-    }
+    // template <typename L, typename R>
+    // bool operator==(
+    //     const reverse_iterator<L> &lhs, 
+    //     const reverse_iterator<R> &rhs)
+    // {
+    //     return (lhs.base() == rhs.base());
+    // }
 
-    template <class Iterator>
-    bool operator!=(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
-    {
-        return (!(lhs.base() == rhs.base()));
-    }
+    // template <class Iterator>
+    // bool operator!=(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
+    // {
+    //     return (!(lhs.base() == rhs.base()));
+    // }
+
+    template<typename L, typename R>
+	bool	operator == (
+		const reverse_iterator<L> & l,
+		const reverse_iterator<R> & r
+	)
+	{
+		return (l.base() == r.base());
+	}
+
+	template<typename L, typename R>
+	bool	operator != (
+		const reverse_iterator<L> & l,
+		const reverse_iterator<R> & r
+	)
+	{
+		return (!(l.base() == r.base()));
+	}
+
 
     template <class Iterator>
     bool operator<(const reverse_iterator<Iterator> &lhs, const reverse_iterator<Iterator> &rhs)
